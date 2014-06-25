@@ -1,0 +1,160 @@
+<%-- 
+
+/**************************************************************************
+Copyright (c) 2011: 
+Istituto Nazionale di Fisica Nucleare (INFN), Italy
+Consorzio COMETA (COMETA), Italy
+
+See http://www.infn.it and and http://www.consorzio-cometa.it for details on the
+copyright holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+****************************************************************************/
+
+
+    Document   : init
+    Created on : 20-Sep-2012, 16:28:38
+    Author     : Marco Fargetta <marco.fargetta@ct.infn.it>
+--%>
+<%
+
+    boolean samlAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.SAML_AUTH_ENABLED, FedPropsValues.SAML_AUTH_ENABLED);
+    String samlRegPage = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_PAGE_MISS_USER, FedPropsValues.SAML_AUTH_PAGE_MISS_USER);
+    String samlAttPage = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE);
+    boolean samlLdapAuthCheck = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.SAML_AUTH_LDLAP_CHECK, FedPropsValues.SAML_AUTH_LDLAP_CHECK);
+    String samlLdapAuthSearchFilter = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_LDAP_SEARCH_FILTER, FedPropsValues.SAML_AUTH_LDAP_SEARCH_FILTER);
+    
+    String samlUserMapping = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_USER_MAPPING);
+    
+    String[] samlUserMappingArray = new String[0];
+
+    String samlUserMappingScreenName = StringPool.BLANK;
+    String samlUserMappingPassword = StringPool.BLANK;
+    String samlUserMappingEmailAddress = StringPool.BLANK;
+    String samlUserMappingFirstName = StringPool.BLANK;
+    String samlUserMappingMiddleName = StringPool.BLANK;
+    String samlUserMappingLastName = StringPool.BLANK;
+    String samlUserMappingJobTitle = StringPool.BLANK;
+    String samlUserMappingGroup = StringPool.BLANK;
+    String samlUserMappingUuid = StringPool.BLANK;
+
+    if (samlUserMapping != null) {
+        samlUserMappingArray = samlUserMapping.split("\n");
+
+        for (int i = 0; i < samlUserMappingArray.length; i++) {
+            if (samlUserMappingArray[i].indexOf("=") == -1) {
+                continue;
+            }
+
+            String mapping[] = samlUserMappingArray[i].split("=");
+
+            if (mapping.length != 2) {
+                continue;
+            }
+            if (mapping[0].equals("screenName")) {
+                samlUserMappingScreenName = mapping[1];
+            } else if (mapping[0].equals("password")) {
+                samlUserMappingPassword = mapping[1];
+            } else if (mapping[0].equals("emailAddress")) {
+                samlUserMappingEmailAddress = mapping[1];
+            } else if (mapping[0].equals("firstName")) {
+                samlUserMappingFirstName = mapping[1];
+            } else if (mapping[0].equals("middleName")) {
+                samlUserMappingMiddleName = mapping[1];
+            } else if (mapping[0].equals("lastName")) {
+                samlUserMappingLastName = mapping[1];
+            } else if (mapping[0].equals("jobTitle")) {
+                samlUserMappingJobTitle = mapping[1];
+            } else if (mapping[0].equals("group")) {
+                samlUserMappingGroup = mapping[1];
+            } else if (mapping[0].equals("uuid")) {
+                samlUserMappingUuid = mapping[1];
+            }
+
+            mapping[1] = "";
+        }
+    }
+
+
+
+%>
+
+<aui:fieldset column="<%= true %>" cssClass="aui-w100">
+    <aui:input label="enabled" name='<%= "settings--" + FedPropsKeys.SAML_AUTH_ENABLED + "--" %>' type="checkbox" value="<%= samlAuthEnabled %>" />
+
+</aui:fieldset>
+
+<h3><liferay-ui:message key="authentication-parameters" /></h3>
+<aui:fieldset column="<%= true %>" cssClass="aui-w100">
+
+    <%
+        String samlMapUpdate = renderResponse.getNamespace() + "updateSaml();";
+    %>
+
+    <aui:input cssClass="lfr-input-text-container" label="screen-name" name="samlUserMappingScreenName" type="text" value="<%= samlUserMappingScreenName%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="password" name="samlUserMappingPassword" type="text" value="<%= samlUserMappingPassword%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="email-address" name="samlUserMappingEmailAddress" type="text" value="<%= samlUserMappingEmailAddress%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="first-name" name="samlUserMappingFirstName" type="text" value="<%= samlUserMappingFirstName%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="middle-name" name="samlUserMappingMiddleName" type="text" value="<%= samlUserMappingMiddleName%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="last-name" name="samlUserMappingLastName" type="text" value="<%= samlUserMappingLastName%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="job-title" name="samlUserMappingJobTitle" type="text" value="<%= samlUserMappingJobTitle%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="group" name="samlUserMappingGroup" type="text" value="<%= samlUserMappingGroup%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="uuid" name="samlUserMappingUuid" type="text" value="<%= samlUserMappingUuid%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input name='<%= "settings--" + FedPropsKeys.SAML_USER_MAPPING + "--" %>' type="hidden" value="<%= PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_USER_MAPPING) %>" />
+    
+    <aui:script>
+        Liferay.provide(window, '<portlet:namespace />updateSaml',
+            function () {
+                    var samlUserMappingFields = ['screenName', 'password', 'emailAddress', 'firstName', 'middleName', 'lastName', 'jobTitle', 'group', 'uuid'];
+                    var samlUserMappingFieldValues = ['samlUserMappingScreenName', 'samlUserMappingPassword', 'samlUserMappingEmailAddress', 'samlUserMappingFirstName', 'samlUserMappingMiddleName', 'samlUserMappingLastName', 'samlUserMappingJobTitle', 'samlUserMappingGroup', 'samlUserMappingUuid'];
+                    var samlUserMappingInput = document.<portlet:namespace />fm['<portlet:namespace />settings--<%= FedPropsKeys.SAML_USER_MAPPING %>--'];
+
+                    samlUserMappingInput.value = '';
+
+                    for (var i = 0; i < samlUserMappingFields.length; i++) {
+                            var samlUserMappingField = samlUserMappingFields[i];
+                            var samlUserMappingValue = document.<portlet:namespace />fm['<portlet:namespace />' + samlUserMappingFieldValues[i]].value;
+
+                            if (samlUserMappingValue) {
+                                    samlUserMappingInput.value += samlUserMappingFields[i] + '=' + samlUserMappingValue + '\n';
+                            }
+                    }
+            }
+        );
+    </aui:script>    
+</aui:fieldset>
+
+<aui:fieldset column="<%= true %>" cssClass="aui-w100">
+
+    <aui:input disabled="<%= true %>" label="create-account" helpMessage="create-fed-account" name='<%= "settings--" + FedPropsKeys.SAML_USER_CREATE + "--" %>' type="checkbox" value="<%= false %>"/>
+    
+    <aui:input disabled="<%= true %>" label="ldap-check" helpMessage="ldap-account-check-by-saml" name='<%= "settings--" + FedPropsKeys.SAML_AUTH_LDLAP_CHECK + "--" %>' type="checkbox" value="<%= samlLdapAuthCheck %>"/>
+
+    <aui:input cssClass="lfr-input-text-container" helpMessage="enter-the-search-filter-to-identify-saml-user" label="ldap-search-filter" name='<%= "settings--" + FedPropsKeys.SAML_AUTH_LDAP_SEARCH_FILTER + "--" %>' type="text" value="<%= samlLdapAuthSearchFilter %>" />
+</aui:fieldset>
+<aui:fieldset column="<%= true %>" cssClass="aui-w100">
+    <aui:input cssClass="lfr-input-text-container" label="page-no-user" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_MISS_USER + "--" %>" type="text" value="<%= samlRegPage %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="page-no-attribute" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE + "--" %>" type="text" value="<%= samlAttPage%>" />
+
+</aui:fieldset>
+<h3><liferay-ui:message key="saml-note" /></h3>

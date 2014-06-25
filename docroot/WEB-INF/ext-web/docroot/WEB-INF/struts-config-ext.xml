@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+	<action-mappings>
+                <action path="/login/stork" type="com.liferay.portlet.login.action.Stork">
+                        <forward name="portlet.login.login" path="portlet.login.login" />
+                </action>
+                <action path="/login/saml" type="com.liferay.portlet.login.action.SAMLAction">
+                        <forward name="portlet.login.login" path="portlet.login.login" />
+                </action>
+	</action-mappings>
+</struts-config>
