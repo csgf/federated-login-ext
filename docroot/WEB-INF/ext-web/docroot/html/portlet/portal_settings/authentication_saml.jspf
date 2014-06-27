@@ -33,6 +33,7 @@ limitations under the License.
     String samlAttPage = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE);
     boolean samlLdapAuthCheck = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.SAML_AUTH_LDLAP_CHECK, FedPropsValues.SAML_AUTH_LDLAP_CHECK);
     String samlLdapAuthSearchFilter = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_LDAP_SEARCH_FILTER, FedPropsValues.SAML_AUTH_LDAP_SEARCH_FILTER);
+    String samlProtectedPage = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_PAGE_PROTECTED, FedPropsValues.SAML_AUTH_PAGE_PROTECTED);
     
     String samlUserMapping = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_USER_MAPPING);
     
@@ -154,7 +155,8 @@ limitations under the License.
 <aui:fieldset column="<%= true %>" cssClass="aui-w100">
     <aui:input cssClass="lfr-input-text-container" label="page-no-user" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_MISS_USER + "--" %>" type="text" value="<%= samlRegPage %>" />
 
-    <aui:input cssClass="lfr-input-text-container" label="page-no-attribute" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE + "--" %>" type="text" value="<%= samlAttPage%>" />
+    <aui:input cssClass="lfr-input-text-container" label="page-no-attribute" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE + "--" %>" type="text" value="<%= samlAttPage %>" />
 
+    <aui:input cssClass="lfr-input-text-container" label="saml-protected-page" label="saml-protected-page-help" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_PROTECTED + "--" %>" type="text" value="<%= samlProtectedPage %>" />  
 </aui:fieldset>
 <h3><liferay-ui:message key="saml-note" /></h3>

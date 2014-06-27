@@ -19,8 +19,8 @@
  * the License.
  * *********************************************************************
  */
-
 package com.liferay.portal.util;
+
 /**
  * @author Marco Fargetta <marco.fargetta@ct.infn.it>
  */
@@ -33,16 +33,17 @@ import com.liferay.portal.kernel.util.FedPropsKeys;
  * @author Jorge Ferrer
  */
 public class SAMLUtil {
+    private static Log _log = LogFactoryUtil.getLog(SAMLUtil.class);
+    private static SAMLUtil _instance = new SAMLUtil();
 
-	public static boolean isEnabled(long companyId) throws SystemException {
-		return PrefsPropsUtil.getBoolean(
-			companyId, FedPropsKeys.SAML_AUTH_ENABLED,
-			FedPropsValues.SAML_AUTH_ENABLED);
-	}
+    public static boolean isEnabled(long companyId) throws SystemException {
+        return PrefsPropsUtil.getBoolean(
+                companyId, FedPropsKeys.SAML_AUTH_ENABLED,
+                FedPropsValues.SAML_AUTH_ENABLED);
+    }
 
-
-	private static Log _log = LogFactoryUtil.getLog(SAMLUtil.class);
-
-	private static SAMLUtil _instance = new SAMLUtil();
+    public static String getAuthURL(long companyId) throws SystemException {
+        return PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_PROTECTED, FedPropsValues.SAML_AUTH_PAGE_PROTECTED);
+    }
 
 }

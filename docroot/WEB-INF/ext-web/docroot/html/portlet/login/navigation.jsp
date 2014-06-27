@@ -140,14 +140,21 @@ if (Validator.isNotNull(strutsAction) && !strutsAction.equals("/login/login")) {
 			</c:if>
                         
 			<c:if test="<%= showSAMLIcon %>">
-				<portlet:renderURL var="samlURL">
+				<portlet:actionURL var="loginURL">
 					<portlet:param name="struts_action" value="/login/saml" />
-				</portlet:renderURL>
+				</portlet:actionURL>
 
+				<%
+				String samlAuthURL = SAMLUtil.getAuthURL(themeDisplay.getCompanyId()); 
+
+				samlAuthURL = HttpUtil.addParameter(samlAuthURL, "redirectSAML", HttpUtil.encodeURL(loginURL.toString()));
+
+				%>
+                            
 				<liferay-ui:icon
 					message="saml-login"
 					src='<%= themeDisplay.getPathThemeImages() + "/common/saml.gif" %>'
-					url="<%= samlURL %>"
+					url="<%= samlAuthURL %>"
 				/>
 			</c:if>
 
