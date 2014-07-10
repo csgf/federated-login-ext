@@ -140,14 +140,11 @@ if (Validator.isNotNull(strutsAction) && !strutsAction.equals("/login/login")) {
 			</c:if>
                         
 			<c:if test="<%= showSAMLIcon %>">
-				<portlet:actionURL var="loginURL">
-					<portlet:param name="struts_action" value="/login/saml" />
-				</portlet:actionURL>
 
 				<%
 				String samlAuthURL = SAMLUtil.getAuthURL(themeDisplay.getCompanyId()); 
 
-				samlAuthURL = HttpUtil.addParameter(samlAuthURL, "redirectSAML", HttpUtil.encodeURL(loginURL.toString()));
+				samlAuthURL = HttpUtil.addParameter(samlAuthURL, "redirectSAML", HttpUtil.encodeURL(PortalUtil.getLayoutURL(themeDisplay.getLayout(),themeDisplay)));
 
 				%>
                             

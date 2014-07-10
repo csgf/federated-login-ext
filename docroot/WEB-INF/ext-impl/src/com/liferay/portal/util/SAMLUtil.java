@@ -46,4 +46,8 @@ public class SAMLUtil {
         return PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_PROTECTED, FedPropsValues.SAML_AUTH_PAGE_PROTECTED);
     }
 
+    public static String getAuthExitURL(long companyId) throws SystemException {
+        return PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_EXIT, FedPropsValues.SAML_AUTH_PAGE_EXIT);
+    }
+
 }

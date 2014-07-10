@@ -34,6 +34,7 @@ limitations under the License.
     boolean samlLdapAuthCheck = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.SAML_AUTH_LDLAP_CHECK, FedPropsValues.SAML_AUTH_LDLAP_CHECK);
     String samlLdapAuthSearchFilter = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_LDAP_SEARCH_FILTER, FedPropsValues.SAML_AUTH_LDAP_SEARCH_FILTER);
     String samlProtectedPage = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_PAGE_PROTECTED, FedPropsValues.SAML_AUTH_PAGE_PROTECTED);
+    String samlProtectedExit = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_PAGE_EXIT, FedPropsValues.SAML_AUTH_PAGE_EXIT);
     
     String samlUserMapping = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_USER_MAPPING);
     
@@ -157,6 +158,8 @@ limitations under the License.
 
     <aui:input cssClass="lfr-input-text-container" label="page-no-attribute" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE + "--" %>" type="text" value="<%= samlAttPage %>" />
 
-    <aui:input cssClass="lfr-input-text-container" label="saml-protected-page" label="saml-protected-page-help" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_PROTECTED + "--" %>" type="text" value="<%= samlProtectedPage %>" />  
+    <aui:input cssClass="lfr-input-text-container" label="saml-protected-page" helpMessage="saml-protected-page-help" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_PROTECTED + "--" %>" type="text" value="<%= samlProtectedPage %>" />  
+    
+    <aui:input cssClass="lfr-input-text-container" label="saml-protected-exit" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_EXIT + "--" %>" type="text" value="<%= samlProtectedExit %>" />  
 </aui:fieldset>
 <h3><liferay-ui:message key="saml-note" /></h3>

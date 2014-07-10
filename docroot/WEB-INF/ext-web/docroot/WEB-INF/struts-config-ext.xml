@@ -6,9 +6,5 @@
                 <action path="/login/stork" type="com.liferay.portlet.login.action.Stork">
                         <forward name="portlet.login.login" path="portlet.login.login" />
                 </action>
-                <action path="/login/saml" type="com.liferay.portlet.login.action.SAMLAction">
-                        <forward name="portlet.login.login" path="portlet.login.login" />
-                        <forward name="portlet.login.login_redirect" path="portlet.login.login_redirect" />
-                </action>
 	</action-mappings>
 </struts-config>
