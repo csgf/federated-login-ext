@@ -35,6 +35,7 @@ public class FedPropsValues extends PropsValues {
 	public static final String SAML_AUTH_PAGE_MISS_USER = GetterUtil.getString(PropsUtil.get(FedPropsKeys.SAML_AUTH_PAGE_MISS_USER), "/not_authorised");
 	public static final String SAML_AUTH_PAGE_MISS_ATTRIBUTE = GetterUtil.getString(PropsUtil.get(FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE), "/attributes_missed");
 	public static final String SAML_AUTH_LDAP_SEARCH_FILTER = GetterUtil.getString(PropsUtil.get(FedPropsKeys.SAML_AUTH_LDAP_SEARCH_FILTER));
+	public static final String SAML_AUTH_LOCAL_SEARCH_FILTER = GetterUtil.getString(PropsUtil.get(FedPropsKeys.SAML_AUTH_LOCAL_SEARCH_FILTER), "mail");
 	public static final boolean SAML_USER_CREATE = GetterUtil.getBoolean(PropsUtil.get(FedPropsKeys.SAML_USER_CREATE), false);
 	public static final String SAML_USER_MAPPING = GetterUtil.getString(PropsUtil.get(FedPropsKeys.SAML_USER_MAPPING));
 	public static final String SAML_AUTH_PAGE_PROTECTED = GetterUtil.getString(PropsUtil.get(FedPropsKeys.SAML_AUTH_PAGE_PROTECTED), "/saml/login");

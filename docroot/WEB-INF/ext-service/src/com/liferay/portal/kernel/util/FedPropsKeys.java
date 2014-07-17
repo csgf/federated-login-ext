@@ -32,6 +32,7 @@ public interface FedPropsKeys extends PropsKeys {
 	public static final String SAML_AUTH_PAGE_MISS_USER = "saml.auth.page.miss.user";
 	public static final String SAML_AUTH_PAGE_MISS_ATTRIBUTE = "saml.auth.page.miss.attribute";
 	public static final String SAML_AUTH_LDAP_SEARCH_FILTER = "saml.auth.ldap.search.filter";
+	public static final String SAML_AUTH_LOCAL_SEARCH_FILTER = "saml.auth.local.search.filter";
 	public static final String SAML_USER_CREATE = "saml.auth.user.create";
 	public static final String SAML_USER_MAPPING = "saml.auth.user.mapping";
 	public static final String SAML_AUTH_PAGE_PROTECTED = "saml.auth.page.protected";

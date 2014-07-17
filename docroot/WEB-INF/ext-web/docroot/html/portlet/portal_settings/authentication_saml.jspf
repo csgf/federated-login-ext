@@ -33,6 +33,7 @@ limitations under the License.
     String samlAttPage = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE);
     boolean samlLdapAuthCheck = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.SAML_AUTH_LDLAP_CHECK, FedPropsValues.SAML_AUTH_LDLAP_CHECK);
     String samlLdapAuthSearchFilter = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_LDAP_SEARCH_FILTER, FedPropsValues.SAML_AUTH_LDAP_SEARCH_FILTER);
+    String samlLocalAuthSearchFilter = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_LOCAL_SEARCH_FILTER, FedPropsValues.SAML_AUTH_LOCAL_SEARCH_FILTER);
     String samlProtectedPage = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_PAGE_PROTECTED, FedPropsValues.SAML_AUTH_PAGE_PROTECTED);
     String samlProtectedExit = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_AUTH_PAGE_EXIT, FedPropsValues.SAML_AUTH_PAGE_EXIT);
     
@@ -146,6 +147,12 @@ limitations under the License.
 </aui:fieldset>
 
 <aui:fieldset column="<%= true %>" cssClass="aui-w100">
+
+    <aui:select helpMessage="enter-the-local-map-to-identify-saml-user" label="local-search-filter" name='<%= "settings--" + FedPropsKeys.SAML_AUTH_LOCAL_SEARCH_FILTER + "--" %>'>
+        <aui:option value="screenname" selected="<%= samlLocalAuthSearchFilter.equals("screenname") %>"><liferay-ui:message key="screen-name"/></aui:option>
+        <aui:option value="mail" selected="<%= samlLocalAuthSearchFilter.equals("mail") %>"><liferay-ui:message key="email-address"/></aui:option>
+        <aui:option value="uuid" selected="<%= samlLocalAuthSearchFilter.equals("uuid") %>"><liferay-ui:message key="uuid"/></aui:option>
+    </aui:select>
 
     <aui:input disabled="<%= true %>" label="create-account" helpMessage="create-fed-account" name='<%= "settings--" + FedPropsKeys.SAML_USER_CREATE + "--" %>' type="checkbox" value="<%= false %>"/>
     
