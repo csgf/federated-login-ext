@@ -156,7 +156,7 @@ limitations under the License.
 
     <aui:input disabled="<%= true %>" label="create-account" helpMessage="create-fed-account" name='<%= "settings--" + FedPropsKeys.SAML_USER_CREATE + "--" %>' type="checkbox" value="<%= false %>"/>
     
-    <aui:input disabled="<%= true %>" label="ldap-check" helpMessage="ldap-account-check-by-saml" name='<%= "settings--" + FedPropsKeys.SAML_AUTH_LDLAP_CHECK + "--" %>' type="checkbox" value="<%= samlLdapAuthCheck %>"/>
+    <aui:input label="ldap-check" helpMessage="ldap-account-check-by-saml" name='<%= "settings--" + FedPropsKeys.SAML_AUTH_LDLAP_CHECK + "--" %>' type="checkbox" value="<%= samlLdapAuthCheck %>"/>
 
     <aui:input cssClass="lfr-input-text-container" helpMessage="enter-the-search-filter-to-identify-saml-user" label="ldap-search-filter" name='<%= "settings--" + FedPropsKeys.SAML_AUTH_LDAP_SEARCH_FILTER + "--" %>' type="text" value="<%= samlLdapAuthSearchFilter %>" />
 </aui:fieldset>
