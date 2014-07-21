@@ -59,7 +59,7 @@ public class SAMLAutoLogin implements AutoLogin {
                 return credentials;
             }
 
-            session.removeAttribute(FedWebKeys.SAML_ID_LOGIN);
+//            session.removeAttribute(FedWebKeys.SAML_ID_LOGIN);
 
             User user = UserLocalServiceUtil.getUserById(userId);
 

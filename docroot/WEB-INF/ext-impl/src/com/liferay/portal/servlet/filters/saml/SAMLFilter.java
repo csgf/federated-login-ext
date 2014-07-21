@@ -31,9 +31,12 @@ import com.liferay.portal.kernel.util.FedPropsKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.servlet.filters.saml.util.SAMLLDAPUtil;
 import com.liferay.portal.util.FedPropsValues;
 import com.liferay.portal.util.FedWebKeys;
 import com.liferay.portal.util.PortalUtil;
@@ -71,6 +74,7 @@ public class SAMLFilter extends BasePortalFilter {
             HttpSession session = request.getSession();
 
             if (session.getAttribute(FedWebKeys.SAML_ID_LOGIN) != null) {
+                session.removeAttribute(FedWebKeys.SAML_ID_LOGIN);
                 session.invalidate();
                 _log.debug("User send to SAML logoout");
                 response.sendRedirect(logoutUrl);
@@ -92,6 +96,11 @@ public class SAMLFilter extends BasePortalFilter {
 
                 
                 String[] samlUserMappingArray;
+		String userScreenName=null;
+		String userUuid=null;
+		String userMail=null;
+		String userFirstName=null;
+		String userLastName=null;
 
                 if (samlUserMapping != null) {
                     samlUserMappingArray = samlUserMapping.split("\n");
@@ -109,48 +118,61 @@ public class SAMLFilter extends BasePortalFilter {
                         }
                         _log.debug("Check for attribute: "+mapping[1]);
 
-                        if (mapping[0].equals("screenName") && localAttributeMatch.equals("screenname")) {
-                            if(request.getAttribute(mapping[1])!=null){
-                                _log.debug("Checking for the mapping: "+mapping[0]);
-                                user= UserLocalServiceUtil.getUserByScreenName(companyId, (String) request.getAttribute(mapping[1]));
-                            }
-                            else{
-                                response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE));
-                                return;
-                            }
-                        } else if (mapping[0].equals("uuid") && localAttributeMatch.equals("uuid")) {
-                            if(request.getAttribute(mapping[1])!=null){
-                                _log.debug("Checking for the mapping: "+mapping[0]);
-                                user= UserLocalServiceUtil.getUserByUuid((String) request.getAttribute(mapping[1]));
-                            }
-                            else{
-                                response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE));
-                                return;
-                            }
-                        } else if (mapping[0].equals("emailAddress") && localAttributeMatch.equals("mail")) {
-                            if(request.getAttribute(mapping[1])!=null){
-                                _log.debug("Checking for the mapping: "+mapping[0]);
+                        if (mapping[0].equals("screenName")){
+			    userScreenName= (String) request.getAttribute(mapping[1]);
+			    if (localAttributeMatch.equals("screenname")) {
+				if(userScreenName!=null){
+				    _log.debug("Checking for the mapping: "+mapping[0]);
+				    user= UserLocalServiceUtil.getUserByScreenName(companyId, userScreenName );
+				}
+				else{
+				    response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE));
+				    return;
+				}
+			    }
+                        } else if (mapping[0].equals("uuid")){
+			    userUuid= (String) request.getAttribute(mapping[1]);
+			    if (localAttributeMatch.equals("uuid")) {
+				if(userUuid!=null){
+				    _log.debug("Checking for the mapping: "+mapping[0]);
+				    user= UserLocalServiceUtil.getUserByUuid(userUuid);
+				}
+				else{
+				    response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE));
+				    return;
+				}
+			    }
+                        } else if (mapping[0].equals("emailAddress")){
+			    userMail= (String) request.getAttribute(mapping[1]);
+			    if (localAttributeMatch.equals("mail")) {
+				if(userMail!=null){
+				    _log.debug("Checking for the mapping: "+mapping[0]);
 
-                                Pattern pat = Pattern.compile("[\\w\\-]([\\.\\w\\-])+@([\\w\\-]+\\.)+[a-zA-Z]{2,4}");
-                                Matcher mailMatch;
+				    Pattern pat = Pattern.compile("[\\w\\-]([\\.\\w\\-])+@([\\w\\-]+\\.)+[a-zA-Z]{2,4}");
+				    Matcher mailMatch;
 
-                                mailMatch= pat.matcher((String) request.getAttribute(mapping[1]));
-                                while(mailMatch.find() && user==null){
-                                    if (Validator.isNotNull(mailMatch.group())) {
-                                        try{
-                                            user = UserLocalServiceUtil.getUserByEmailAddress(companyId, mailMatch.group());
-                                        }
-                                        catch(NoSuchUserException nse){
-                                            _log.info("Mail: "+mailMatch.group()+" is not registered");
-                                        }
-                                    }
-                                }
-                            }
-                            else{
-                                response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE));
-                                return;
-                            }
-                        }
+				    mailMatch= pat.matcher((String) request.getAttribute(mapping[1]));
+				    while(mailMatch.find() && user==null){
+					if (Validator.isNotNull(mailMatch.group())) {
+					    try{
+						user = UserLocalServiceUtil.getUserByEmailAddress(companyId, mailMatch.group());
+					    }
+					    catch(NoSuchUserException nse){
+						_log.info("Mail: "+mailMatch.group()+" is not registered");
+					    }
+					}
+				    }
+				}
+				else{
+				    response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE));
+				    return;
+				}
+			    }
+			} else if (mapping[0].equals("firstName")){
+			    userFirstName= (String) request.getAttribute(mapping[1]);
+			} else if (mapping[0].equals("lastName")){
+			    userLastName= (String) request.getAttribute(mapping[1]);
+			}
 
                         mapping[1] = "";
                         i++;
@@ -160,11 +182,98 @@ public class SAMLFilter extends BasePortalFilter {
                 if(user==null && PrefsPropsUtil.getBoolean(companyId, FedPropsKeys.SAML_AUTH_LDLAP_CHECK, FedPropsValues.SAML_AUTH_LDLAP_CHECK)){
                     _log.debug("User not found, check on LDAP");
 //                    user=getUserFromLdap();
+
+
+		    String ldapFilter= PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_LDAP_SEARCH_FILTER, FedPropsValues.SAML_AUTH_LDAP_SEARCH_FILTER);
+		    
+		    ldapFilter= ldapFilter.replaceAll("@company_id@",Long.toString(companyId));
+		    if(userScreenName!=null){
+			ldapFilter= ldapFilter.replaceAll("@screen_name@",userScreenName);
+		    }
+		    if(userFirstName!=null){
+			ldapFilter= ldapFilter.replaceAll("@first_name@",userFirstName);
+		    }
+		    if(userLastName!=null){
+			ldapFilter= ldapFilter.replaceAll("@last_name@",userLastName);
+		    }
+
+		    for(String idLDAP:PrefsPropsUtil.getStringArray(companyId, "ldap.server.ids",",")){
+                        
+                        String mailMap=null;
+                        String userMaps[]= PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_USER_MAPPINGS+"."+idLDAP).split("\n");
+                        int mIndex=0;
+                        while(mailMap==null && mIndex<userMaps.length){
+                            String map= userMaps[mIndex++];
+                            if(map.indexOf("=")==-1 || map.split("=").length!=2 ){
+                                continue;
+                            }
+                            String[] sMap= map.split("=");
+                            if(sMap[0].equals("emailAddress")){
+                                mailMap=sMap[1];
+                            }
+                        }
+                        
+                        if(mailMap==null){
+                            _log.warn("LDAP server configured without the mail map");
+                            continue;
+                        }
+                        
+                        
+                        
+                        SAMLLDAPUtil samlLdapUtil = new SAMLLDAPUtil(
+                                    PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_BASE_PROVIDER_URL+"."+idLDAP),
+                                    PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_BASE_DN+"."+idLDAP));
+
+                    
+                        if(userMail!=null){
+                            Pattern pat = Pattern.compile("[\\w\\-]([\\.\\w\\-])+@([\\w\\-]+\\.)+[a-zA-Z]{2,4}");
+                            Matcher mailMatch;
+
+                            mailMatch= pat.matcher(userMail);
+                            while(mailMatch.find() && user==null){
+                                ldapFilter= ldapFilter.replaceAll("@email_address@",mailMatch.group());
+                                String mail= samlLdapUtil.getUserAttribute(
+                                        PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_IMPORT_USER_SEARCH_FILTER+"."+idLDAP),
+                                        ldapFilter,
+                                        mailMap);
+                                        
+                                if(mail!=null){
+                                    try{
+                                        user= UserLocalServiceUtil.getUserByEmailAddress(companyId, mail);
+                                    }
+                                    catch(NoSuchUserException nse){
+                                        _log.debug("Mail: "+mail+" found in LDAP but it is not registered");
+                                    }
+                                }
+                                
+                            }
+                        }
+                        else{
+                            String mail= samlLdapUtil.getUserAttribute(
+                                    PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_IMPORT_USER_SEARCH_FILTER+"."+idLDAP),
+                                    ldapFilter,
+                                    mailMap);
+
+                            if(mail!=null){
+                                try{
+                                    user= UserLocalServiceUtil.getUserByEmailAddress(companyId, mail);
+                                }
+                                catch(NoSuchUserException nse){
+                                    _log.debug("Mail: "+mail+" found in LDAP but it is not registered");
+                                }
+                            }
+                            
+                        }
+                    }
+                    
+		    
+		    
+
                 }
 
                 if (user==null) {
                     _log.info("Impossible to find a user with the current attributes");
-                    response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_USER, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE));
+                    response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_USER, FedPropsValues.SAML_AUTH_PAGE_MISS_USER));
                     return;
                 }
 
