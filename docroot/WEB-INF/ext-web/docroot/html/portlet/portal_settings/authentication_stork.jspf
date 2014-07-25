@@ -1,0 +1,73 @@
+<%-- 
+
+/**************************************************************************
+Copyright (c) 2011: 
+Istituto Nazionale di Fisica Nucleare (INFN), Italy
+Consorzio COMETA (COMETA), Italy
+
+See http://www.infn.it and and http://www.consorzio-cometa.it for details on the
+copyright holders.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+****************************************************************************/
+
+
+    Document   : init
+    Created on : 21-Jul-2014, 18:28:38
+    Author     : Marco Fargetta <marco.fargetta@ct.infn.it>
+--%>
+<%
+
+    boolean storkAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.STORK_AUTH_ENABLED, FedPropsValues.STORK_AUTH_ENABLED);
+
+    String storkRegPage = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_AUTH_PAGE_MISS_USER, FedPropsValues.STORK_AUTH_PAGE_MISS_USER);
+    String storkAttPage = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.STORK_AUTH_PAGE_MISS_ATTRIBUTE);
+    boolean storkLdapAuthCheck = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.STORK_AUTH_LDLAP_CHECK, FedPropsValues.STORK_AUTH_LDLAP_CHECK);
+    String storkLdapAuthSearchFilter = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_AUTH_LDAP_SEARCH_FILTER, FedPropsValues.STORK_AUTH_LDAP_SEARCH_FILTER);
+    String storkLocalAuthSearchFilter = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_AUTH_LOCAL_SEARCH_FILTER, FedPropsValues.STORK_AUTH_LOCAL_SEARCH_FILTER);
+    
+
+
+
+%>
+
+<aui:fieldset column="<%= true %>" cssClass="aui-w100">
+    <aui:input label="enabled" name='<%= "settings--" + FedPropsKeys.STORK_AUTH_ENABLED + "--" %>' type="checkbox" value="<%= storkAuthEnabled %>" />
+
+</aui:fieldset>
+
+    
+<h3><liferay-ui:message key="authentication-parameters" /></h3>
+
+
+<aui:fieldset column="<%= true %>" cssClass="aui-w100">
+
+    <aui:select helpMessage="enter-the-local-map-to-identify-stork-user" label="local-search-filter" name='<%= "settings--" + FedPropsKeys.STORK_AUTH_LOCAL_SEARCH_FILTER + "--" %>'>
+        <aui:option value="screenname" selected="<%= storkLocalAuthSearchFilter.equals("screenname") %>"><liferay-ui:message key="screen-name"/></aui:option>
+        <aui:option value="mail" selected="<%= storkLocalAuthSearchFilter.equals("mail") %>"><liferay-ui:message key="email-address"/></aui:option>
+        <aui:option value="uuid" selected="<%= storkLocalAuthSearchFilter.equals("uuid") %>"><liferay-ui:message key="uuid"/></aui:option>
+    </aui:select>
+
+    <aui:input disabled="<%= true %>" label="create-account" helpMessage="create-fed-account" name='<%= "settings--" + FedPropsKeys.STORK_USER_CREATE + "--" %>' type="checkbox" value="<%= false %>"/>
+    
+    <aui:input label="ldap-check" helpMessage="ldap-account-check-by-saml" name='<%= "settings--" + FedPropsKeys.STORK_AUTH_LDLAP_CHECK + "--" %>' type="checkbox" value="<%= storkLdapAuthCheck %>"/>
+
+    <aui:input cssClass="lfr-input-text-container" helpMessage="enter-the-search-filter-to-identify-saml-user" label="ldap-search-filter" name='<%= "settings--" + FedPropsKeys.STORK_AUTH_LDAP_SEARCH_FILTER + "--" %>' type="text" value="<%= storkLdapAuthSearchFilter %>" />
+</aui:fieldset>
+<aui:fieldset column="<%= true %>" cssClass="aui-w100">
+    <aui:input cssClass="lfr-input-text-container" label="page-no-user" name="<%= "settings--" + FedPropsKeys.STORK_AUTH_PAGE_MISS_USER + "--" %>" type="text" value="<%= storkRegPage %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="page-no-attribute" name="<%= "settings--" + FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE + "--" %>" type="text" value="<%= storkAttPage %>" />
+
+</aui:fieldset>
+<h3><liferay-ui:message key="stork-note" /></h3>

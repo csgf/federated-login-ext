@@ -27,5 +27,6 @@ limitations under the License.
     Author     : Marco Fargetta <marco.fargetta@ct.infn.it>
 --%>
 <%@ page import="com.liferay.portal.util.SAMLUtil" %>
+<%@ page import="com.liferay.portal.util.STORKUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.FedPropsKeys" %>
 <%@ page import="com.liferay.portal.util.FedPropsValues" %>

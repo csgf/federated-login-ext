@@ -42,6 +42,11 @@ public class FedPropsValues extends PropsValues {
 	public static final String SAML_AUTH_PAGE_EXIT = GetterUtil.getString(PropsUtil.get(FedPropsKeys.SAML_AUTH_PAGE_EXIT), "/saml/logout");
 
 	public static final boolean STORK_AUTH_ENABLED = GetterUtil.getBoolean(PropsUtil.get(FedPropsKeys.STORK_AUTH_ENABLED),false);
+	public static final boolean STORK_AUTH_LDLAP_CHECK = GetterUtil.getBoolean(PropsUtil.get(FedPropsKeys.STORK_AUTH_LDLAP_CHECK), true);
+	public static final String STORK_AUTH_PAGE_MISS_USER = GetterUtil.getString(PropsUtil.get(FedPropsKeys.STORK_AUTH_PAGE_MISS_USER), "/not_authorised");
+	public static final String STORK_AUTH_PAGE_MISS_ATTRIBUTE = GetterUtil.getString(PropsUtil.get(FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE), "/attributes_missed");
+	public static final String STORK_AUTH_LDAP_SEARCH_FILTER = GetterUtil.getString(PropsUtil.get(FedPropsKeys.STORK_AUTH_LDAP_SEARCH_FILTER));
+	public static final String STORK_AUTH_LOCAL_SEARCH_FILTER = GetterUtil.getString(PropsUtil.get(FedPropsKeys.STORK_AUTH_LOCAL_SEARCH_FILTER), "mail");
 	public static final boolean STORK_USER_CREATE = GetterUtil.getBoolean(PropsUtil.get(FedPropsKeys.STORK_USER_CREATE), false);
         
 	public static final boolean COMPANY_SECURITY_LOCAL_LOGIN = GetterUtil.getBoolean(PropsUtil.get(FedPropsKeys.COMPANY_SECURITY_LOCAL_LOGIN), true);

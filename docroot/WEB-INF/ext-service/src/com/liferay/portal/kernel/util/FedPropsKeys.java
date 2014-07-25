@@ -39,6 +39,11 @@ public interface FedPropsKeys extends PropsKeys {
 	public static final String SAML_AUTH_PAGE_EXIT = "saml.auth.page.exit";
         
 	public static final String STORK_AUTH_ENABLED = "stork.auth.enabled";
+	public static final String STORK_AUTH_LDLAP_CHECK = "stork.auth.ldap.check";
+	public static final String STORK_AUTH_PAGE_MISS_USER = "stork.auth.page.miss.user";
+	public static final String STORK_AUTH_PAGE_MISS_ATTRIBUTE = "stork.auth.page.miss.attribute";
+	public static final String STORK_AUTH_LDAP_SEARCH_FILTER = "stork.auth.ldap.search.filter";
+	public static final String STORK_AUTH_LOCAL_SEARCH_FILTER = "stork.auth.local.search.filter";
 	public static final String STORK_USER_CREATE = "stork.auth.user.create";
         
 	public static final String COMPANY_SECURITY_LOCAL_LOGIN = "company.security.local.login";

@@ -14,8 +14,6 @@
  */
 --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/html/portlet/login/init.jsp" %>
 
 <%
@@ -56,6 +54,13 @@ boolean showSAMLIcon = false;
 if (!strutsAction.equals("/login/saml") && SAMLUtil.isEnabled(company.getCompanyId())) {
 	showSAMLIcon = true;
 }
+
+boolean showSTORKIcon = false;
+
+if (!strutsAction.equals("/login/stork") && STORKUtil.isEnabled(company.getCompanyId())) {
+	showSTORKIcon = true;
+}
+
 
 boolean showSignInIcon = false;
 
@@ -152,6 +157,18 @@ if (Validator.isNotNull(strutsAction) && !strutsAction.equals("/login/login")) {
 					message="saml-login"
 					src='<%= themeDisplay.getPathThemeImages() + "/common/saml.gif" %>'
 					url="<%= samlAuthURL %>"
+				/>
+			</c:if>
+                        
+			<c:if test="<%= showSTORKIcon %>">
+				<portlet:renderURL var="storkUrl">
+					<portlet:param name="struts_action" value="/login/stork" />
+				</portlet:renderURL>
+
+				<liferay-ui:icon
+					message="stork-login"
+					src='<%= themeDisplay.getPathThemeImages() + "/common/stork.gif" %>'
+					url="<%= storkUrl %>"
 				/>
 			</c:if>
 

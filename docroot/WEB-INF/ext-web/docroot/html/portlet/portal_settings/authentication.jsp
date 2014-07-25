@@ -69,7 +69,6 @@ boolean siteminderAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId()
 boolean siteminderImportFromLdap = PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.SITEMINDER_IMPORT_FROM_LDAP, PropsValues.SITEMINDER_IMPORT_FROM_LDAP);
 String siteminderUserHeader = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.SITEMINDER_USER_HEADER, PropsValues.SITEMINDER_USER_HEADER);
 
-boolean storkAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.STORK_AUTH_ENABLED, FedPropsValues.STORK_AUTH_ENABLED);
 %>
 
 <liferay-ui:error-marker key="errorSection" value="authentication" />
@@ -225,13 +224,7 @@ boolean storkAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), Fed
 		<%@ include file="/html/portlet/portal_settings/authentication_saml.jspf" %>
 	</liferay-ui:section>
 	<liferay-ui:section>
-		<aui:fieldset>
-			<aui:input label="enabled" name='<%= "settings--" + FedPropsKeys.STORK_AUTH_ENABLED + "--" %>' type="checkbox" value="<%= storkAuthEnabled %>" />
-                        <h3><liferay-ui:message key="user-mapping" /></h3>
-
-                        
-			<aui:input disabled="disabled" label="create-account" name='<%= "settings--" + FedPropsKeys.STORK_AUTH_ENABLED + "--" %>' type="checkbox" />
-		</aui:fieldset>
+		<%@ include file="/html/portlet/portal_settings/authentication_stork.jspf" %>
 	</liferay-ui:section>
 </liferay-ui:tabs>
 
