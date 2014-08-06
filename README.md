@@ -19,10 +19,12 @@ proxies.
 
 ### STORK federation
 
-The STORK module relies on [opensmal-java
-libraries](https://shibboleth.net/products/). Please, download and
-make available them in your application context following the
-guideline for your application server.
+The STORK module includes the[opensmal-java
+libraries](https://shibboleth.net/products/). In order to make the
+library working, please, you have to download and make available your
+application context the endorsed libraries used by opensaml.  These
+are Xerces and Xalan. For the installation in your application server
+you may refer to the official guideline provided for opensaml.
 
 
 

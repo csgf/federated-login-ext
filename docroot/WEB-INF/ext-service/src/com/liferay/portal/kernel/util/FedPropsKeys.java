@@ -19,7 +19,6 @@
  * the License.
  * *********************************************************************
  */
-
 package com.liferay.portal.kernel.util;
 
 /**
@@ -27,24 +26,33 @@ package com.liferay.portal.kernel.util;
  */
 public interface FedPropsKeys extends PropsKeys {
 
-	public static final String SAML_AUTH_ENABLED = "saml.auth.enabled";
-	public static final String SAML_AUTH_LDLAP_CHECK = "saml.auth.ldap.check";
-	public static final String SAML_AUTH_PAGE_MISS_USER = "saml.auth.page.miss.user";
-	public static final String SAML_AUTH_PAGE_MISS_ATTRIBUTE = "saml.auth.page.miss.attribute";
-	public static final String SAML_AUTH_LDAP_SEARCH_FILTER = "saml.auth.ldap.search.filter";
-	public static final String SAML_AUTH_LOCAL_SEARCH_FILTER = "saml.auth.local.search.filter";
-	public static final String SAML_USER_CREATE = "saml.auth.user.create";
-	public static final String SAML_USER_MAPPING = "saml.auth.user.mapping";
-	public static final String SAML_AUTH_PAGE_PROTECTED = "saml.auth.page.protected";
-	public static final String SAML_AUTH_PAGE_EXIT = "saml.auth.page.exit";
-        
-	public static final String STORK_AUTH_ENABLED = "stork.auth.enabled";
-	public static final String STORK_AUTH_LDLAP_CHECK = "stork.auth.ldap.check";
-	public static final String STORK_AUTH_PAGE_MISS_USER = "stork.auth.page.miss.user";
-	public static final String STORK_AUTH_PAGE_MISS_ATTRIBUTE = "stork.auth.page.miss.attribute";
-	public static final String STORK_AUTH_LDAP_SEARCH_FILTER = "stork.auth.ldap.search.filter";
-	public static final String STORK_AUTH_LOCAL_SEARCH_FILTER = "stork.auth.local.search.filter";
-	public static final String STORK_USER_CREATE = "stork.auth.user.create";
-        
-	public static final String COMPANY_SECURITY_LOCAL_LOGIN = "company.security.local.login";
+    public static final String SAML_AUTH_ENABLED = "saml.auth.enabled";
+    public static final String SAML_AUTH_LDLAP_CHECK = "saml.auth.ldap.check";
+    public static final String SAML_AUTH_PAGE_MISS_USER = "saml.auth.page.miss.user";
+    public static final String SAML_AUTH_PAGE_MISS_ATTRIBUTE = "saml.auth.page.miss.attribute";
+    public static final String SAML_AUTH_LDAP_SEARCH_FILTER = "saml.auth.ldap.search.filter";
+    public static final String SAML_AUTH_LOCAL_SEARCH_FILTER = "saml.auth.local.search.filter";
+    public static final String SAML_USER_CREATE = "saml.auth.user.create";
+    public static final String SAML_USER_MAPPING = "saml.auth.user.mapping";
+    public static final String SAML_AUTH_PAGE_PROTECTED = "saml.auth.page.protected";
+    public static final String SAML_AUTH_PAGE_EXIT = "saml.auth.page.exit";
+    
+    public static final String STORK_AUTH_ENABLED = "stork.auth.enabled";
+    public static final String STORK_AUTH_LDLAP_CHECK = "stork.auth.ldap.check";
+    public static final String STORK_AUTH_PAGE_MISS_USER = "stork.auth.page.miss.user";
+    public static final String STORK_AUTH_PAGE_MISS_ATTRIBUTE = "stork.auth.page.miss.attribute";
+    public static final String STORK_AUTH_LDAP_SEARCH_FILTER = "stork.auth.ldap.search.filter";
+    public static final String STORK_AUTH_LOCAL_SEARCH_FILTER = "stork.auth.local.search.filter";
+    public static final String STORK_USER_CREATE = "stork.auth.user.create";
+    public static final String STORK_USER_MAPPING = "stork.auth.user.mapping";
+    public static final String STORK_SP_QAALEVEL = "stork.auth.sp.qaalevel";
+    public static final String STORK_SP_NAME = "stork.auth.sp.name";
+    public static final String STORK_SP_SECTOR = "stork.auth.sp.sector";
+    public static final String STORK_SP_ENVIRONMENT = "stork.auth.sp.environment";
+    public static final String STORK_SP_APLICATION = "stork.auth.sp.aplication";
+    public static final String STORK_SP_COUNTRY = "stork.auth.sp.country";
+    public static final String STORK_SPEPS_URL = "stork.auth.sp.pepsurl";
+    public static final String STORK_SP_EUROMAP = "stork.auth.sp.euromap";
+
+    public static final String COMPANY_SECURITY_LOCAL_LOGIN = "company.security.local.login";
 }

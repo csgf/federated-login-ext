@@ -19,14 +19,17 @@
  *  limitations under the License.
  ***********************************************************************/
 
-package com.liferay.portlet.login.action;
-
-import com.liferay.portal.struts.PortletAction;
+package com.liferay.portlet.login.action.stork;
 
 /**
  *
  * @author Marco Fargetta <marco.fargetta@ct.infn.it>
  */
-public class StorkAction extends PortletAction{
+public class STORKException extends Exception{
+
+    public STORKException(String message) {
+        super(message);
+    }
+    
 
 }

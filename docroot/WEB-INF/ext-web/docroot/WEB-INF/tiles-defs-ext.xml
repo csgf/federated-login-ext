@@ -3,4 +3,12 @@
 
 <tiles-definitions>
 	<definition name="portlet.ext" extends="portlet" />
+        
+	<definition name="portlet.login.stork.country" extends="portlet.login" >
+            <put name="portlet_content" value="/portlet/login/strok/country.jsp"/>
+        </definition>
+        
+	<definition name="portlet.login.stork.peps" extends="portlet.login" >
+            <put name="portlet_content" value="/portlet/login/strok/pepsRedirect.jsp"/>
+        </definition>
 </tiles-definitions>

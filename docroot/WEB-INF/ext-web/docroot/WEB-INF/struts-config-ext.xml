@@ -3,8 +3,10 @@
 
 <struts-config>
 	<action-mappings>
-                <action path="/login/stork" type="com.liferay.portlet.login.action.StorkAction">
+                <action path="/login/stork" type="com.liferay.portlet.login.action.STORKAction">
                         <forward name="portlet.login.login" path="portlet.login.login" />
+                        <forward name="portlet.login.stork.country" path="portlet.login.stork.country" />
+                        <forward name="portlet.login.stork.peps" path="portlet.login.stork.peps" />
                 </action>
 	</action-mappings>
 </struts-config>
