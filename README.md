@@ -19,7 +19,7 @@ proxies.
 
 ### STORK federation
 
-The STORK module includes the[opensmal-java
+The STORK module includes the [opensmal-java
 libraries](https://shibboleth.net/products/). In order to make the
 library working, please, you have to download and make available your
 application context the endorsed libraries used by opensaml.  These
