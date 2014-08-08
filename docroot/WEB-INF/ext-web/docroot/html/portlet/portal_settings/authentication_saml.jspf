@@ -98,53 +98,59 @@ limitations under the License.
 </aui:fieldset>
 
 <h3><liferay-ui:message key="authentication-parameters" /></h3>
-<aui:fieldset column="<%= true %>" cssClass="aui-w100">
 
-    <%
-        String samlMapUpdate = renderResponse.getNamespace() + "updateSaml();";
-    %>
+<%
+    String samlMapUpdate = renderResponse.getNamespace() + "updateSaml();";
+%>
+<aui:script>
+    Liferay.provide(window, '<portlet:namespace />updateSaml',
+        function () {
+                var samlUserMappingFields = ['screenName', 'password', 'emailAddress', 'firstName', 'middleName', 'lastName', 'jobTitle', 'group', 'uuid'];
+                var samlUserMappingFieldValues = ['samlUserMappingScreenName', 'samlUserMappingPassword', 'samlUserMappingEmailAddress', 'samlUserMappingFirstName', 'samlUserMappingMiddleName', 'samlUserMappingLastName', 'samlUserMappingJobTitle', 'samlUserMappingGroup', 'samlUserMappingUuid'];
+                var samlUserMappingInput = document.<portlet:namespace />fm['<portlet:namespace />settings--<%= FedPropsKeys.SAML_USER_MAPPING %>--'];
+
+                samlUserMappingInput.value = '';
+
+                for (var i = 0; i < samlUserMappingFields.length; i++) {
+                        var samlUserMappingField = samlUserMappingFields[i];
+                        var samlUserMappingValue = document.<portlet:namespace />fm['<portlet:namespace />' + samlUserMappingFieldValues[i]].value;
+
+                        if (samlUserMappingValue) {
+                                samlUserMappingInput.value += samlUserMappingFields[i] + '=' + samlUserMappingValue + '\n';
+                        }
+                }
+        }
+    );
+</aui:script>    
+
+<aui:fieldset column="<%= true %>" cssClass="aui-w50">
 
     <aui:input cssClass="lfr-input-text-container" label="screen-name" name="samlUserMappingScreenName" type="text" value="<%= samlUserMappingScreenName%>" onChange="<%= samlMapUpdate %>" />
-
-    <aui:input cssClass="lfr-input-text-container" label="password" name="samlUserMappingPassword" type="text" value="<%= samlUserMappingPassword%>" onChange="<%= samlMapUpdate %>" />
-
-    <aui:input cssClass="lfr-input-text-container" label="email-address" name="samlUserMappingEmailAddress" type="text" value="<%= samlUserMappingEmailAddress%>" onChange="<%= samlMapUpdate %>" />
 
     <aui:input cssClass="lfr-input-text-container" label="first-name" name="samlUserMappingFirstName" type="text" value="<%= samlUserMappingFirstName%>" onChange="<%= samlMapUpdate %>" />
 
     <aui:input cssClass="lfr-input-text-container" label="middle-name" name="samlUserMappingMiddleName" type="text" value="<%= samlUserMappingMiddleName%>" onChange="<%= samlMapUpdate %>" />
 
+    <aui:input cssClass="lfr-input-text-container" label="group" name="samlUserMappingGroup" type="text" value="<%= samlUserMappingGroup%>" onChange="<%= samlMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="password" name="samlUserMappingPassword" type="text" value="<%= samlUserMappingPassword%>" onChange="<%= samlMapUpdate %>" />
+
+</aui:fieldset>
+
+<aui:fieldset column="<%= true %>" cssClass="aui-w50">
+    <aui:input cssClass="lfr-input-text-container" label="email-address" name="samlUserMappingEmailAddress" type="text" value="<%= samlUserMappingEmailAddress%>" onChange="<%= samlMapUpdate %>" />
+
     <aui:input cssClass="lfr-input-text-container" label="last-name" name="samlUserMappingLastName" type="text" value="<%= samlUserMappingLastName%>" onChange="<%= samlMapUpdate %>" />
 
     <aui:input cssClass="lfr-input-text-container" label="job-title" name="samlUserMappingJobTitle" type="text" value="<%= samlUserMappingJobTitle%>" onChange="<%= samlMapUpdate %>" />
 
-    <aui:input cssClass="lfr-input-text-container" label="group" name="samlUserMappingGroup" type="text" value="<%= samlUserMappingGroup%>" onChange="<%= samlMapUpdate %>" />
-
     <aui:input cssClass="lfr-input-text-container" label="uuid" name="samlUserMappingUuid" type="text" value="<%= samlUserMappingUuid%>" onChange="<%= samlMapUpdate %>" />
-
-    <aui:input name='<%= "settings--" + FedPropsKeys.SAML_USER_MAPPING + "--" %>' type="hidden" value="<%= PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_USER_MAPPING) %>" />
     
-    <aui:script>
-        Liferay.provide(window, '<portlet:namespace />updateSaml',
-            function () {
-                    var samlUserMappingFields = ['screenName', 'password', 'emailAddress', 'firstName', 'middleName', 'lastName', 'jobTitle', 'group', 'uuid'];
-                    var samlUserMappingFieldValues = ['samlUserMappingScreenName', 'samlUserMappingPassword', 'samlUserMappingEmailAddress', 'samlUserMappingFirstName', 'samlUserMappingMiddleName', 'samlUserMappingLastName', 'samlUserMappingJobTitle', 'samlUserMappingGroup', 'samlUserMappingUuid'];
-                    var samlUserMappingInput = document.<portlet:namespace />fm['<portlet:namespace />settings--<%= FedPropsKeys.SAML_USER_MAPPING %>--'];
-
-                    samlUserMappingInput.value = '';
-
-                    for (var i = 0; i < samlUserMappingFields.length; i++) {
-                            var samlUserMappingField = samlUserMappingFields[i];
-                            var samlUserMappingValue = document.<portlet:namespace />fm['<portlet:namespace />' + samlUserMappingFieldValues[i]].value;
-
-                            if (samlUserMappingValue) {
-                                    samlUserMappingInput.value += samlUserMappingFields[i] + '=' + samlUserMappingValue + '\n';
-                            }
-                    }
-            }
-        );
-    </aui:script>    
+    <aui:input name='<%= "settings--" + FedPropsKeys.SAML_USER_MAPPING + "--" %>' type="hidden" value="<%= PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.SAML_USER_MAPPING) %>" />
 </aui:fieldset>
+
+                    
+<h3><liferay-ui:message key="service-parameters" /></h3>
 
 <aui:fieldset column="<%= true %>" cssClass="aui-w100">
 

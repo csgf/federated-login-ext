@@ -26,6 +26,7 @@ limitations under the License.
     Created on : 21-Jul-2014, 18:28:38
     Author     : Marco Fargetta <marco.fargetta@ct.infn.it>
 --%>
+<%@page import="com.liferay.portal.util.PrefsPropsUtil"%>
 <%
 
     boolean storkAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.STORK_AUTH_ENABLED, FedPropsValues.STORK_AUTH_ENABLED);
@@ -35,8 +36,67 @@ limitations under the License.
     boolean storkLdapAuthCheck = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.STORK_AUTH_LDLAP_CHECK, FedPropsValues.STORK_AUTH_LDLAP_CHECK);
     String storkLdapAuthSearchFilter = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_AUTH_LDAP_SEARCH_FILTER, FedPropsValues.STORK_AUTH_LDAP_SEARCH_FILTER);
     String storkLocalAuthSearchFilter = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_AUTH_LOCAL_SEARCH_FILTER, FedPropsValues.STORK_AUTH_LOCAL_SEARCH_FILTER);
-    
+    short storkSPQAA = PrefsPropsUtil.getShort(company.getCompanyId(), FedPropsKeys.STORK_SP_QAALEVEL, FedPropsValues.STORK_SP_QAALEVEL);
+    String storkSPName = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_NAME, FedPropsValues.STORK_SP_NAME);
+    String storkSPSector = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_SECTOR, FedPropsValues.STORK_SP_SECTOR);
+    String storkSPEnvironment = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_ENVIRONMENT, FedPropsValues.STORK_SP_ENVIRONMENT);
+    String storkSPApplication = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_APLICATION, FedPropsValues.STORK_SP_APLICATION);
+    String storkSPCountry = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_COUNTRY, FedPropsValues.STORK_SP_COUNTRY);
+    String storkSPURL = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SPEPS_URL, FedPropsValues.STORK_SPEPS_URL);
+    boolean storkSPEuroMap = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.STORK_SP_EUROMAP, FedPropsValues.STORK_SP_EUROMAP);
 
+
+
+    String storkUserMapping = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_USER_MAPPING);
+    
+    String[] storkUserMappingArray = new String[0];
+
+    String storkUserMappingScreenName = StringPool.BLANK;
+    String storkUserMappingPassword = StringPool.BLANK;
+    String storkUserMappingEmailAddress = StringPool.BLANK;
+    String storkUserMappingFirstName = StringPool.BLANK;
+    String storkUserMappingMiddleName = StringPool.BLANK;
+    String storkUserMappingLastName = StringPool.BLANK;
+    String storkUserMappingJobTitle = StringPool.BLANK;
+    String storkUserMappingGroup = StringPool.BLANK;
+    String storkUserMappingUuid = StringPool.BLANK;
+
+    if (storkUserMapping != null) {
+        storkUserMappingArray = storkUserMapping.split("\n");
+
+        for (int i = 0; i < storkUserMappingArray.length; i++) {
+            if (storkUserMappingArray[i].indexOf("=") == -1) {
+                continue;
+            }
+
+            String mapping[] = storkUserMappingArray[i].split("=");
+
+            if (mapping.length != 2) {
+                continue;
+            }
+            if (mapping[0].equals("screenName")) {
+                storkUserMappingScreenName = mapping[1];
+            } else if (mapping[0].equals("password")) {
+                storkUserMappingPassword = mapping[1];
+            } else if (mapping[0].equals("emailAddress")) {
+                storkUserMappingEmailAddress = mapping[1];
+            } else if (mapping[0].equals("firstName")) {
+                storkUserMappingFirstName = mapping[1];
+            } else if (mapping[0].equals("middleName")) {
+                storkUserMappingMiddleName = mapping[1];
+            } else if (mapping[0].equals("lastName")) {
+                storkUserMappingLastName = mapping[1];
+            } else if (mapping[0].equals("jobTitle")) {
+                storkUserMappingJobTitle = mapping[1];
+            } else if (mapping[0].equals("group")) {
+                storkUserMappingGroup = mapping[1];
+            } else if (mapping[0].equals("uuid")) {
+                storkUserMappingUuid = mapping[1];
+            }
+
+            mapping[1] = "";
+        }
+    }
 
 
 %>
@@ -48,6 +108,109 @@ limitations under the License.
 
     
 <h3><liferay-ui:message key="authentication-parameters" /></h3>
+
+<%
+    String storkMapUpdate = renderResponse.getNamespace() + "updateStork();";
+%>
+<aui:script>
+    Liferay.provide(window, '<portlet:namespace />updateStork',
+        function () {
+                var storkUserMappingFields = ['screenName', 'password', 'emailAddress', 'firstName', 'middleName', 'lastName', 'jobTitle', 'group', 'uuid'];
+                var storkUserMappingFieldValues = ['storkUserMappingScreenName', 'storkUserMappingPassword', 'storkUserMappingEmailAddress', 'storkUserMappingFirstName', 'storkUserMappingMiddleName', 'storkUserMappingLastName', 'storkUserMappingJobTitle', 'storkUserMappingGroup', 'storkUserMappingUuid'];
+                var storkUserMappingInput = document.<portlet:namespace />fm['<portlet:namespace />settings--<%= FedPropsKeys.STORK_USER_MAPPING %>--'];
+
+                storkUserMappingInput.value = '';
+
+                for (var i = 0; i < storkUserMappingFields.length; i++) {
+                        var storkUserMappingField = storkUserMappingFields[i];
+                        var storkUserMappingValue = document.<portlet:namespace />fm['<portlet:namespace />' + storkUserMappingFieldValues[i]].value;
+
+                        if (storkUserMappingValue) {
+                                storkUserMappingInput.value += storkUserMappingFields[i] + '=' + storkUserMappingValue + '\n';
+                        }
+                }
+        }
+    );
+</aui:script>
+<aui:fieldset column="<%= true %>" cssClass="aui-w50">
+
+
+    <aui:input cssClass="lfr-input-text-container" label="screen-name" name="storkUserMappingScreenName" type="text" value="<%= storkUserMappingScreenName%>" onChange="<%= storkMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="first-name" name="storkUserMappingFirstName" type="text" value="<%= storkUserMappingFirstName%>" onChange="<%= storkMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="middle-name" name="storkUserMappingMiddleName" type="text" value="<%= storkUserMappingMiddleName%>" onChange="<%= storkMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="group" name="storkUserMappingGroup" type="text" value="<%= storkUserMappingGroup%>" onChange="<%= storkMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="password" name="storkUserMappingPassword" type="text" value="<%= storkUserMappingPassword%>" onChange="<%= storkMapUpdate %>" />
+</aui:fieldset>
+
+<aui:fieldset column="<%= true %>" cssClass="aui-w50">
+    <aui:input cssClass="lfr-input-text-container" label="email-address" name="storkUserMappingEmailAddress" type="text" value="<%= storkUserMappingEmailAddress%>" onChange="<%= storkMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="last-name" name="storkUserMappingLastName" type="text" value="<%= storkUserMappingLastName%>" onChange="<%= storkMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="job-title" name="storkUserMappingJobTitle" type="text" value="<%= storkUserMappingJobTitle%>" onChange="<%= storkMapUpdate %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="uuid" name="storkUserMappingUuid" type="text" value="<%= storkUserMappingUuid%>" onChange="<%= storkMapUpdate %>" />
+
+    <aui:input name='<%= "settings--" + FedPropsKeys.STORK_USER_MAPPING + "--" %>' type="hidden" value="<%= PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_USER_MAPPING) %>" />
+    
+
+                    
+                    
+</aui:fieldset>
+
+<h3><liferay-ui:message key="service-parameters" /></h3>
+
+<aui:fieldset column="<%= true %>" cssClass="aui-w100">
+    <aui:select label="stork-qaa-level" name='<%= "settings--" + FedPropsKeys.STORK_SP_QAALEVEL + "--" %>'>
+        <aui:option value="0" selected="<%= storkSPQAA==0 %>">0</aui:option>
+        <aui:option value="1" selected="<%= storkSPQAA==1 %>">1</aui:option>
+        <aui:option value="2" selected="<%= storkSPQAA==2 %>">2</aui:option>
+        <aui:option value="3" selected="<%= storkSPQAA==3 %>">3</aui:option>
+        <aui:option value="4" selected="<%= storkSPQAA==4 %>">4</aui:option>
+        <aui:option value="5" selected="<%= storkSPQAA==5 %>">5</aui:option>
+        <aui:option value="6" selected="<%= storkSPQAA==6 %>">6</aui:option>
+        <aui:option value="7" selected="<%= storkSPQAA==7 %>">7</aui:option>
+        <aui:option value="8" selected="<%= storkSPQAA==8 %>">8</aui:option>
+    </aui:select>
+    
+    <aui:input cssClass="lfr-input-text-container" label="stork-sp-name" name="<%= "settings--" + FedPropsKeys.STORK_SP_NAME + "--" %>" type="text" value="<%= storkSPName %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="stork-sp-sector" name="<%= "settings--" + FedPropsKeys.STORK_SP_SECTOR + "--" %>" type="text" value="<%= storkSPSector %>" />
+
+    <aui:input cssClass="lfr-input-text-container" label="stork-sp-application" name="<%= "settings--" + FedPropsKeys.STORK_SP_APLICATION + "--" %>" type="text" value="<%= storkSPApplication %>" />
+
+    <aui:select label="stork-sp-environment" name='<%= "settings--" + FedPropsKeys.STORK_SP_ENVIRONMENT + "--" %>'>
+        <aui:option value="TEST" selected="<%= storkSPEnvironment.equals("TEST") %>"><liferay-ui:message key="test"/></aui:option>
+        <aui:option value="PROD" selected="<%= storkSPEnvironment.equals("PROD") %>"><liferay-ui:message key="production"/></aui:option>
+    </aui:select>
+
+    <aui:select label="stork-sp-country" name='<%= "settings--" + FedPropsKeys.STORK_SP_COUNTRY + "--" %>'>
+        <aui:option value="BE" selected="<%= storkSPCountry.equals("BE") %>">België/Belgique/Belgien</aui:option>
+        <aui:option value="DE" selected="<%= storkSPCountry.equals("DE") %>">Deutschland</aui:option>
+        <aui:option value="EE" selected="<%= storkSPCountry.equals("EE") %>">Eesti</aui:option>
+        <aui:option value="GR" selected="<%= storkSPCountry.equals("GR") %>">Elláda/Hellas</aui:option>        
+        <aui:option value="ES" selected="<%= storkSPCountry.equals("ES") %>">España</aui:option>
+        <aui:option value="FR" selected="<%= storkSPCountry.equals("FR") %>">France</aui:option>
+        <aui:option value="IT" selected="<%= storkSPCountry.equals("IT") %>">Italia</aui:option>
+        <aui:option value="IS" selected="<%= storkSPCountry.equals("IS") %>">Ísland</aui:option>
+        <aui:option value="LU" selected="<%= storkSPCountry.equals("LU") %>">Lëtzebuerg/Luxembourg/Luxemburg</aui:option>
+        <aui:option value="LT" selected="<%= storkSPCountry.equals("LT") %>">Lietuva</aui:option>
+        <aui:option value="AT" selected="<%= storkSPCountry.equals("AT") %>">Österreich</aui:option>
+        <aui:option value="PT" selected="<%= storkSPCountry.equals("PT") %>">Portugal</aui:option>
+        <aui:option value="SI" selected="<%= storkSPCountry.equals("SI") %>">Slovenija</aui:option>
+        <aui:option value="FI" selected="<%= storkSPCountry.equals("FI") %>">Suomi/Finland</aui:option>
+        <aui:option value="SE" selected="<%= storkSPCountry.equals("SE") %>">Sverige</aui:option>
+    </aui:select>
+
+    <aui:input cssClass="lfr-input-text-container" label="stork-sp-url" name="<%= "settings--" + FedPropsKeys.STORK_SPEPS_URL + "--" %>" type="text" value="<%= storkSPURL %>" />
+
+    <aui:input label="stork-sp-euromap" name='<%= "settings--" + FedPropsKeys.STORK_SP_EUROMAP + "--" %>' type="checkbox" value="<%= storkSPEuroMap %>"/>
+    
+</aui:fieldset>
 
 
 <aui:fieldset column="<%= true %>" cssClass="aui-w100">
