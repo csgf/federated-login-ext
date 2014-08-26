@@ -26,7 +26,7 @@ limitations under the License.
     Created on : 21-Jul-2014, 18:28:38
     Author     : Marco Fargetta <marco.fargetta@ct.infn.it>
 --%>
-<%@page import="com.liferay.portal.util.PrefsPropsUtil"%>
+
 <%
 
     boolean storkAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.STORK_AUTH_ENABLED, FedPropsValues.STORK_AUTH_ENABLED);
@@ -42,6 +42,15 @@ limitations under the License.
     String storkSPEnvironment = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_ENVIRONMENT, FedPropsValues.STORK_SP_ENVIRONMENT);
     String storkSPApplication = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_APLICATION, FedPropsValues.STORK_SP_APLICATION);
     String storkSPCountry = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_COUNTRY, FedPropsValues.STORK_SP_COUNTRY);
+
+    String[] strCountriesL= PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_COUNTRY_LIST, FedPropsValues.STORK_SP_COUNTRY_LIST).split(",");
+    Country[] countryStork= new Country[strCountriesL.length];
+    
+    for(int iCountry=0; iCountry<countryStork.length; iCountry++){
+        
+        countryStork[iCountry]= new Country(strCountriesL[iCountry].trim());
+    }
+    
     String storkSPURL = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SPEPS_URL, FedPropsValues.STORK_SPEPS_URL);
     boolean storkSPEuroMap = PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.STORK_SP_EUROMAP, FedPropsValues.STORK_SP_EUROMAP);
 
@@ -166,15 +175,9 @@ limitations under the License.
 
 <aui:fieldset column="<%= true %>" cssClass="aui-w100">
     <aui:select label="stork-qaa-level" name='<%= "settings--" + FedPropsKeys.STORK_SP_QAALEVEL + "--" %>'>
-        <aui:option value="0" selected="<%= storkSPQAA==0 %>">0</aui:option>
-        <aui:option value="1" selected="<%= storkSPQAA==1 %>">1</aui:option>
-        <aui:option value="2" selected="<%= storkSPQAA==2 %>">2</aui:option>
-        <aui:option value="3" selected="<%= storkSPQAA==3 %>">3</aui:option>
-        <aui:option value="4" selected="<%= storkSPQAA==4 %>">4</aui:option>
-        <aui:option value="5" selected="<%= storkSPQAA==5 %>">5</aui:option>
-        <aui:option value="6" selected="<%= storkSPQAA==6 %>">6</aui:option>
-        <aui:option value="7" selected="<%= storkSPQAA==7 %>">7</aui:option>
-        <aui:option value="8" selected="<%= storkSPQAA==8 %>">8</aui:option>
+<% for(int iSel=0;iSel<9; iSel++){ %>       
+        <aui:option value="<%= iSel %>" selected="<%= storkSPQAA==iSel %>"><%= iSel %></aui:option>
+<% } %>
     </aui:select>
     
     <aui:input cssClass="lfr-input-text-container" label="stork-sp-name" name="<%= "settings--" + FedPropsKeys.STORK_SP_NAME + "--" %>" type="text" value="<%= storkSPName %>" />
@@ -189,21 +192,13 @@ limitations under the License.
     </aui:select>
 
     <aui:select label="stork-sp-country" name='<%= "settings--" + FedPropsKeys.STORK_SP_COUNTRY + "--" %>'>
-        <aui:option value="BE" selected="<%= storkSPCountry.equals("BE") %>">België/Belgique/Belgien</aui:option>
-        <aui:option value="DE" selected="<%= storkSPCountry.equals("DE") %>">Deutschland</aui:option>
-        <aui:option value="EE" selected="<%= storkSPCountry.equals("EE") %>">Eesti</aui:option>
-        <aui:option value="GR" selected="<%= storkSPCountry.equals("GR") %>">Elláda/Hellas</aui:option>        
-        <aui:option value="ES" selected="<%= storkSPCountry.equals("ES") %>">España</aui:option>
-        <aui:option value="FR" selected="<%= storkSPCountry.equals("FR") %>">France</aui:option>
-        <aui:option value="IT" selected="<%= storkSPCountry.equals("IT") %>">Italia</aui:option>
-        <aui:option value="IS" selected="<%= storkSPCountry.equals("IS") %>">Ísland</aui:option>
-        <aui:option value="LU" selected="<%= storkSPCountry.equals("LU") %>">Lëtzebuerg/Luxembourg/Luxemburg</aui:option>
-        <aui:option value="LT" selected="<%= storkSPCountry.equals("LT") %>">Lietuva</aui:option>
-        <aui:option value="AT" selected="<%= storkSPCountry.equals("AT") %>">Österreich</aui:option>
-        <aui:option value="PT" selected="<%= storkSPCountry.equals("PT") %>">Portugal</aui:option>
-        <aui:option value="SI" selected="<%= storkSPCountry.equals("SI") %>">Slovenija</aui:option>
-        <aui:option value="FI" selected="<%= storkSPCountry.equals("FI") %>">Suomi/Finland</aui:option>
-        <aui:option value="SE" selected="<%= storkSPCountry.equals("SE") %>">Sverige</aui:option>
+<%
+    for(Country  country: countryStork){
+%>        
+<aui:option value="<%= country.getName() %>" selected="<%= storkSPCountry.equals(country.getName()) %>"><%= country.getOriginalname() %></aui:option>
+<%
+    }
+%>        
     </aui:select>
 
     <aui:input cssClass="lfr-input-text-container" label="stork-sp-url" name="<%= "settings--" + FedPropsKeys.STORK_SPEPS_URL + "--" %>" type="text" value="<%= storkSPURL %>" />
@@ -215,7 +210,7 @@ limitations under the License.
 
 <aui:fieldset column="<%= true %>" cssClass="aui-w100">
 
-    <aui:select helpMessage="enter-the-local-map-to-identify-stork-user" label="local-search-filter" name='<%= "settings--" + FedPropsKeys.STORK_AUTH_LOCAL_SEARCH_FILTER + "--" %>'>
+    <aui:select helpMessage="enter-the-local-map-to-identify-saml-user" label="local-search-filter" name='<%= "settings--" + FedPropsKeys.STORK_AUTH_LOCAL_SEARCH_FILTER + "--" %>'>
         <aui:option value="screenname" selected="<%= storkLocalAuthSearchFilter.equals("screenname") %>"><liferay-ui:message key="screen-name"/></aui:option>
         <aui:option value="mail" selected="<%= storkLocalAuthSearchFilter.equals("mail") %>"><liferay-ui:message key="email-address"/></aui:option>
         <aui:option value="uuid" selected="<%= storkLocalAuthSearchFilter.equals("uuid") %>"><liferay-ui:message key="uuid"/></aui:option>

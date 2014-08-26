@@ -55,6 +55,7 @@ public class FedPropsValues extends PropsValues {
     public static final String STORK_SP_ENVIRONMENT = GetterUtil.getString(PropsUtil.get(FedPropsKeys.STORK_SP_ENVIRONMENT),"TEST");
     public static final String STORK_SP_APLICATION = GetterUtil.getString(PropsUtil.get(FedPropsKeys.STORK_SP_APLICATION),"DEMO-APPLICATION");
     public static final String STORK_SP_COUNTRY = GetterUtil.getString(PropsUtil.get(FedPropsKeys.STORK_SP_COUNTRY),"IT");
+    public static final String STORK_SP_COUNTRY_LIST = GetterUtil.getString(PropsUtil.get(FedPropsKeys.STORK_SP_COUNTRY_LIST),"BE(België/Belgique/Belgien),DE(Deutschland),EE(Eesti),GR(Elláda/Hellas),ES(España),FR(France),IT(Italia),IS(Ísland),LU(Lëtzebuerg/Luxembourg/Luxemburg),LT(Lietuva),AT(Österreich),PT(Portugal),SI(Slovenija),FI(Suomi/Finland),SE(Sverige)");
     public static final String STORK_SPEPS_URL = GetterUtil.getString(PropsUtil.get(FedPropsKeys.STORK_SPEPS_URL),"https://it-peps-stork.polito.it/PEPS2/ServiceProvider");
     public static final boolean STORK_SP_EUROMAP = GetterUtil.getBoolean(PropsUtil.get(FedPropsKeys.STORK_SP_EUROMAP),true);
 

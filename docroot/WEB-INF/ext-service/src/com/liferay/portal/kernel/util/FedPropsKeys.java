@@ -51,6 +51,7 @@ public interface FedPropsKeys extends PropsKeys {
     public static final String STORK_SP_ENVIRONMENT = "stork.auth.sp.environment";
     public static final String STORK_SP_APLICATION = "stork.auth.sp.aplication";
     public static final String STORK_SP_COUNTRY = "stork.auth.sp.country";
+    public static final String STORK_SP_COUNTRY_LIST = "stork.auth.sp.country.list";
     public static final String STORK_SPEPS_URL = "stork.auth.sp.pepsurl";
     public static final String STORK_SP_EUROMAP = "stork.auth.sp.euromap";
 

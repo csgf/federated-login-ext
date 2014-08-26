@@ -27,9 +27,18 @@ public class Country {
 	private String originalname;
 
 	
-	Country(){}
+	public Country(){}
 
-	Country(String name,String originalname){
+        /**
+         * 
+         * @param nameComplex Format ISOCODE2(CountryName). Ex. IT(Italia) 
+         */
+	public Country(String nameComplex){
+		this.name=nameComplex.substring(0,2);
+		this.originalname=nameComplex.substring(nameComplex.indexOf("(")+1,nameComplex.indexOf(")"));
+	}
+        
+	public Country(String name,String originalname){
 		this.name=name;
 		this.originalname=originalname;
 	}

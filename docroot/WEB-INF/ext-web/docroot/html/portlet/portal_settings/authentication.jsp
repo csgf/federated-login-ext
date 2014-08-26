@@ -17,6 +17,7 @@
 <%@ include file="/html/portlet/portal_settings/init.jsp" %>
 <%@ page import="com.liferay.portal.kernel.util.FedPropsKeys" %>
 <%@ page import="com.liferay.portal.util.FedPropsValues" %>
+<%@page import="com.liferay.portlet.login.action.stork.Country"%>
 
 <%
 String companySecurityAuthType = company.getAuthType();
