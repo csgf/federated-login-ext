@@ -1,0 +1,16 @@
+<aui:fieldset>
+  
+
+<aui:select label="stork-select-user-country" name='citizenCountry'>
+<%
+    for(Country  country: countryStork){
+%>        
+        <aui:option value="<%= country.getName() %>"><%= country.getOriginalname() %></aui:option>
+<%
+    }
+%>        
+    </aui:select>
+
+    <aui:input type="hidden" name="pepsUrl" value="<%= storkSPURL %>"/>
+
+</aui:fieldset>

@@ -1,0 +1,153 @@
+<aui:fieldset>
+    <h3><liferay-ui:message key="stork-select-user-country" /></h3>
+<div id="map-eu">
+<ul id="europe">
+<s:iterator value="countries"><a href="#<s:property value='name'/>"><s:property value="originalname" /></a></li>
+<%
+    for(Country  country: countryStork){
+        if(country.getName().equals("AT")){
+            out.println("<li id=\"eu3\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("BE")){
+            out.println("<li id=\"eu5\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("EE")){
+            out.println("<li id=\"eu12\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("FR")){
+            out.println("<li id=\"eu13\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("FI")){
+            out.println("<li id=\"eu14\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("DE")){
+            out.println("<li id=\"eu16\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("GR")){
+            out.println("<li id=\"eu17\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("IS")){
+            out.println("<li id=\"eu19\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("IT")){
+            out.println("<li id=\"eu22\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("LT")){
+            out.println("<li id=\"eu26\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("LU")){
+            out.println("<li id=\"eu27\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("NL")){
+            out.println("<li id=\"eu33\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("PT")){
+            out.println("<li id=\"eu36\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("SK")){
+            out.println("<li id=\"eu40\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("SI")){
+            out.println("<li id=\"eu41\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("ES")){
+            out.println("<li id=\"eu42\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("SE")){
+            out.println("<li id=\"eu43\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("AL")){
+            out.println("<li id=\"eu1\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("AD")){
+            out.println("<li id=\"eu2\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("BA")){
+            out.println("<li id=\"eu6\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("BG")){
+            out.println("<li id=\"eu7\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("HR")){
+            out.println("<li id=\"eu8\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("CY")){
+            out.println("<li id=\"eu9\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("CZ")){
+            out.println("<li id=\"eu10\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("DK")){
+            out.println("<li id=\"eu11\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("GE")){
+            out.println("<li id=\"eu15\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("HU")){
+            out.println("<li id=\"eu18\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("IE")){
+            out.println("<li id=\"eu20\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("Kosovo")){
+            out.println("<li id=\"eu23\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("LV")){
+            out.println("<li id=\"eu24\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("LI")){
+            out.println("<li id=\"eu25\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("MK")){
+            out.println("<li id=\"eu28\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("MT")){
+            out.println("<li id=\"eu29\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("MD")){
+            out.println("<li id=\"eu30\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("MC")){
+            out.println("<li id=\"eu31\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("ME")){
+            out.println("<li id=\"eu32\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("NO")){
+            out.println("<li id=\"eu34\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("PL")){
+            out.println("<li id=\"eu35\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("RO")){
+            out.println("<li id=\"eu37\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("SM")){
+            out.println("<li id=\"eu21\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("RS")){
+            out.println("<li id=\"eu39\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("CH")){
+            out.println("<li id=\"eu44\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("TR")){
+            out.println("<li id=\"eu45\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("UA")){
+            out.println("<li id=\"eu46\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+        if(country.getName().equals("GB")){
+            out.println("<li id=\"eu47\"><a href=\"#"+country.getName()+"\">"+country.getOriginalname()+"</a></li>");
+        }
+    }
+%>        
+
+</ul>
+</div>
+
+
+    <aui:input type="hidden" name="citizenCountry" value=""/>
+    <aui:input type="hidden" name="pepsUrl" value="<%= storkSPURL %>"/>
+
+</aui:fieldset>

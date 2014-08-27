@@ -28,6 +28,22 @@ limitations under the License.
 --%>
 <%@ include file="/html/portlet/login/init.jsp" %>
 
+
+<%
+    boolean euromap= PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.STORK_SP_EUROMAP, FedPropsValues.STORK_SP_EUROMAP);
+
+    String[] strCountriesL= PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SP_COUNTRY_LIST, FedPropsValues.STORK_SP_COUNTRY_LIST).split(",");
+    Country[] countryStork= new Country[strCountriesL.length];
+    
+    for(int iCountry=0; iCountry<countryStork.length; iCountry++){
+        
+        countryStork[iCountry]= new Country(strCountriesL[iCountry].trim());
+    }
+    
+    String storkSPURL = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SPEPS_URL, FedPropsValues.STORK_SPEPS_URL);
+
+%>
+
 <portlet:actionURL var="storkURL">
         <portlet:param name="saveLastPath" value="0" />
         <portlet:param name="struts_action" value="/login/stork" />
@@ -35,10 +51,17 @@ limitations under the License.
 
 
 <aui:form action="<%= storkURL %>" method="post" name="fm">
+    <liferay-ui:error key="missUserCountry" message="stork-select-user-country-missed" />
+        <div id="margen">
+                <c:if test="<%= euromap%>">
+                        <%@ include file="/html/portlet/login/stork/selectMapCountry.jspf" %>
+                </c:if>
+                <c:if test="<%= !euromap%>">
+                        <%@ include file="/html/portlet/login/stork/selectListCountry.jspf" %>
+                </c:if>
+        </div>
 
         <aui:fieldset>
-                <aui:input cssClass="openid-login" name="storkCountry" type="text" />
-
                 <aui:button-row>
                         <aui:button type="submit" value="sign-in" />
                 </aui:button-row>
@@ -46,13 +69,5 @@ limitations under the License.
 </aui:form>
 
 
-<div id="margen">
-        <c:if test="<%= euromap %>">
-                <liferay-util:include page="selectMapCountry.jsp"/>
-        </c:if>
-        <c:else>
-                <liferay-util:include page="selectListCountry.jsp"/>
-        </c:else>
-</div>
 
 <liferay-util:include page="/html/portlet/login/navigation.jsp" />

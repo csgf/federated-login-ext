@@ -5,7 +5,7 @@
 	<definition name="portlet.ext" extends="portlet" />
         
 	<definition name="portlet.login.stork.country" extends="portlet.login" >
-            <put name="portlet_content" value="/portlet/login/strok/country.jsp"/>
+            <put name="portlet_content" value="/portlet/login/stork/country.jsp"/>
         </definition>
         
 	<definition name="portlet.login.stork.peps" extends="portlet.login" >

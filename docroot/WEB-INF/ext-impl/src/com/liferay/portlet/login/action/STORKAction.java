@@ -47,73 +47,22 @@ public class STORKAction extends PortletAction {
     private static Log _log = LogFactoryUtil.getLog(STORKAction.class);
 
     private static final long serialVersionUID = 3660074009157921579L;
-    private static Properties configs;
-    private static ArrayList<Country> countries;
-    private static ArrayList<PersonalAttribute> attributeList;
-    private static String spId;
-    private static String providerName;
-    private static String qaa;
-    private static String returnUrl;
-    private String SAMLRequest;
-    private String pepsUrl;
-    private String citizenCountry;
-    private String euromap;
-
+ 
     @Override
     public ActionForward render(ActionMapping mapping, ActionForm form, PortletConfig portletConfig, RenderRequest renderRequest, RenderResponse renderResponse) throws Exception {
         ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(
                 WebKeys.THEME_DISPLAY);
 
+        _log.debug("Selected STORK Authentication");
         if (!STORKUtil.isEnabled(themeDisplay.getCompanyId())) {
+            _log.warn("STORK Authentication with STORK disabled");
             return mapping.findForward("portlet.login.login");
         }
 
         renderResponse.setTitle(themeDisplay.translate("stork"));
 
-
-        try{
-            populate();
-            return mapping.findForward("portlet.login.stork.country");
-        }
-        catch(Exception ex){
-            _log.error("Impossible to read STORK Properties");
-        }
-        
-        return mapping.findForward("portlet.login.login");
-        
-
+        return mapping.findForward("portlet.login.stork.country");
     }
+   
 
-    private void populate() throws Exception{
-        //Loading sp.properties
-//        try {
-//            configs = SPUtil.loadConfigs(Constants.SP_PROPERTIES);
-//        } catch (IOException ex) {
-//            _log.error(ex);
-//            throw new STORKException("Could not load configuration file ");
-//        }
-//
-//        countries = new ArrayList<Country>();
-//
-//        // Using the country list from the STORK Control File (xml)
-//        if ((Boolean.valueOf(configs.getProperty(Constants.SP_VERSIONCONTROL)).booleanValue())) {
-//            ManageSTORKInfo versioninfo = new ManageSTORKInfo(configs.getProperty(Constants.SP_ENVIRONMENT));
-//            List<Country> countrynames = versioninfo.processSTORKInfo(configs.getProperty(Constants.SP_VERSIONINFOFILE));
-//            for (Iterator<Country> iter = countrynames.iterator(); iter.hasNext();) {
-//                Country c = (Country) iter.next();
-//                countries.add(c);
-//            }
-//            setPepsUrl(versioninfo.getPepsURL());
-//        } // Using the country list from sp.properties
-//        else {
-//            int numCountries = Integer.parseInt(configs.getProperty(Constants.COUNTRY_NUMBER));
-//            for (int i = 1; i <= numCountries; i++) {
-//                Country country = new Country(configs.getProperty("country" + i + ".name"), configs.getProperty("country" + i + ".name"));
-//                countries.add(country);
-//            }
-//            setPepsUrl(configs.getProperty(Constants.SPEPS_URL));
-//        }
-//        setEuromap(configs.getProperty(Constants.SP_EUROMAP));
-//        return "populate";
-    }
 }

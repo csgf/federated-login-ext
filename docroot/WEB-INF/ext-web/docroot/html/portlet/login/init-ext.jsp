@@ -30,3 +30,4 @@ limitations under the License.
 <%@ page import="com.liferay.portal.util.STORKUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.FedPropsKeys" %>
 <%@ page import="com.liferay.portal.util.FedPropsValues" %>
+<%@ page import="com.liferay.portlet.login.action.stork.Country"%>
