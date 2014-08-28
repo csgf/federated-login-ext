@@ -148,6 +148,5 @@
 
 
     <aui:input type="hidden" name="citizenCountry" value=""/>
-    <aui:input type="hidden" name="pepsUrl" value="<%= storkSPURL %>"/>
 
 </aui:fieldset>

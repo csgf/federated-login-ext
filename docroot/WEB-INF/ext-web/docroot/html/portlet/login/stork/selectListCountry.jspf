@@ -11,6 +11,4 @@
 %>        
     </aui:select>
 
-    <aui:input type="hidden" name="pepsUrl" value="<%= storkSPURL %>"/>
-
 </aui:fieldset>

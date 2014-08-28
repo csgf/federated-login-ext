@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<instances>
+	<instance name="SP">
+
+		<!-- Settings Saml Engine =============================-->
+		<configuration name="SamlEngineConf">			
+			<parameter name="fileConfiguration" value="SamlEngineConfig.xml" />
+		</configuration>
+
+		<!-- Settings module signature ========================-->
+		<configuration name="SignatureConf">
+			<!-- Specific signature module ====================-->
+			<parameter name="class" value="eu.stork.peps.auth.engine.core.impl.SignSW" />
+			<!-- Settings specific module =====================-->
+			<parameter name="fileConfiguration" value="SamlEngineSignConfig.xml" />
+		</configuration>
+
+	</instance>
+</instances>

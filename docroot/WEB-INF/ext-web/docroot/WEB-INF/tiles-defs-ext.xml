@@ -4,11 +4,18 @@
 <tiles-definitions>
 	<definition name="portlet.ext" extends="portlet" />
         
-	<definition name="portlet.login.stork.country" extends="portlet.login" >
+	<definition name="portlet.login.stork" extends="portlet.login" />
+        
+	<definition name="portlet.login.stork.country" extends="portlet.login.stork" >
             <put name="portlet_content" value="/portlet/login/stork/country.jsp"/>
         </definition>
         
-	<definition name="portlet.login.stork.peps" extends="portlet.login" >
-            <put name="portlet_content" value="/portlet/login/strok/pepsRedirect.jsp"/>
+	<definition name="portlet.login.stork.peps" extends="portlet.login.stork" >
+            <put name="portlet_content" value="/portlet/login/stork/pepsRedirect.jsp"/>
         </definition>
+
+        <definition name="portlet.login.stork.error" extends="portlet.login.stork" >
+            <put name="portlet_content" value="/portlet/login/stork/error.jsp"/>
+        </definition>
+        
 </tiles-definitions>

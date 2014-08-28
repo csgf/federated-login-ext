@@ -40,8 +40,6 @@ limitations under the License.
         countryStork[iCountry]= new Country(strCountriesL[iCountry].trim());
     }
     
-    String storkSPURL = PrefsPropsUtil.getString(company.getCompanyId(), FedPropsKeys.STORK_SPEPS_URL, FedPropsValues.STORK_SPEPS_URL);
-
 %>
 
 <portlet:actionURL var="storkURL">
