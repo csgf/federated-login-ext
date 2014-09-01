@@ -29,4 +29,13 @@ limitations under the License.
 
 <%@ include file="/html/portlet/login/init.jsp" %>
 
-<h2>qui dovrei fare qualche cosa</h2>
+<h3><liferay-ui:message key="stork-manual-redirect" /></h3>
+<form action="<%= request.getParameter("PEPSUrl") %>" method="post" name="fm" id="<portlet:namespace/>pepsform">
+    <input name="SAMLRequest" type="hidden" value="<%= request.getParameter("SAMLToken") %>" />
+    <input name="country" type="hidden" value="<%= request.getParameter("CCountry") %>" />
+    <input type="submit" value="Sign In"/>
+</form>
+    
+<aui:script use="aui-base">
+    A.one('#<portlet:namespace/>pepsform').submit();
+</aui:script>

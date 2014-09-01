@@ -162,6 +162,8 @@ public class STORKAction extends PortletAction {
         
         if(token!=null){
             actionResponse.setRenderParameter("SAMLToken", PEPSUtil.encodeSAMLToken(token));
+            actionResponse.setRenderParameter("CCountry", ParamUtil.getString(actionRequest, "citizenCountry"));
+            actionResponse.setRenderParameter("PEPSUrl", PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SPEPS_URL));
             setForward(actionRequest, "portlet.login.stork.peps");
         }
     }
