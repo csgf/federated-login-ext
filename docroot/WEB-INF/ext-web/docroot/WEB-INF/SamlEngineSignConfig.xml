@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>SWModule sign with JKS.</comment>
+	<entry key="keystorePath">/home/marco/Projects/Liferay/6.1/liferay-portal-6.1.1-ce-ga2/glassfish-3.1.2/domains/domain1/config/certificates-demo-provider.jks</entry>
+	<entry key="keyStorePassword">ciccio</entry>
+	<entry key="keyPassword">ciccio</entry>
+	<entry key="issuer">CN=COMODO RSA Domain Validation Secure Server CA, O=COMODO CA Limited, L=Salford, ST=Greater Manchester, C=GB</entry>	
+	<entry key="serialNumber">1ed28652f64b5dddf41c882d848f8010</entry>		
+	<entry key="keystoreType">JKS</entry>
+</properties>

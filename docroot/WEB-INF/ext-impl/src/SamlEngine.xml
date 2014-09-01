@@ -12,7 +12,7 @@
 			<!-- Specific signature module ====================-->
 			<parameter name="class" value="eu.stork.peps.auth.engine.core.impl.SignSW" />
 			<!-- Settings specific module =====================-->
-			<parameter name="fileConfiguration" value="SamlEngineSignConfig.xml" />
+			<parameter name="fileConfiguration" value="../SamlEngineSignConfig.xml" />
 		</configuration>
 
 	</instance>
