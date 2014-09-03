@@ -1,5 +1,5 @@
 AUI().use('get', function(A) {
-    A.Get.script('http://code.jquery.com/jquery-1.5.2.min.js', {
+    A.Get.script('https://code.jquery.com/jquery-1.5.2.min.js', {
         onSuccess: function() {
 
 

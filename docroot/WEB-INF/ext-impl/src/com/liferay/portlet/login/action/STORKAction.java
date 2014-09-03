@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.FedPropsKeys;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.FedPropsValues;
@@ -40,6 +41,7 @@ import eu.stork.peps.auth.commons.PersonalAttribute;
 import eu.stork.peps.auth.commons.PersonalAttributeList;
 import eu.stork.peps.auth.commons.STORKAuthnRequest;
 import eu.stork.peps.auth.engine.STORKSAMLEngine;
+import java.net.URLEncoder;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
@@ -78,93 +80,119 @@ public class STORKAction extends PortletAction {
 
     @Override
     public void processAction(ActionMapping mapping, ActionForm form, PortletConfig portletConfig, ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-        if(Validator.isNull(ParamUtil.getString(actionRequest, "citizenCountry"))){
-            SessionErrors.add(actionRequest, "missUserCountry");
-            return;
-        }
-        
         ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
                         WebKeys.THEME_DISPLAY);
         
-        STORKAuthnRequest authnRequest= new STORKAuthnRequest();
-
-        authnRequest.setCitizenCountryCode(ParamUtil.getString(actionRequest, "citizenCountry"));
+        if(!STORKUtil.isEnabled(themeDisplay.getCompanyId())){
+            throw new PrincipalException();
+        }
         
-        authnRequest.setIssuer(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_NAME));
-
-        authnRequest.setDestination(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SPEPS_URL));
-        
-        authnRequest.setProviderName(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_NAME));
-
-        authnRequest.setQaa(PrefsPropsUtil.getInteger(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_QAALEVEL));
-
-        ActionResponseImpl actionResponseImpl = (ActionResponseImpl) actionResponse;
-        PortletURL portletURL = actionResponseImpl.createActionURL();
-        portletURL.setParameter("struts_action", "/login/open_id");
-        portletURL.setParameter("StorkAction", "login");
-        portletURL.setParameter("saveLastPath", "0");
-
-        
-        authnRequest.setAssertionConsumerServiceURL(portletURL.toString());
-        
-        authnRequest.setSpSector(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_SECTOR));
-        
-        authnRequest.setSpInstitution(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_NAME));
-        
-        authnRequest.setSpApplication(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_APLICATION));
-        
-        authnRequest.setSpCountry(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_COUNTRY));
-        
-        authnRequest.setSPID(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_NAME));
-
-        
-        String storkUserMapping = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_USER_MAPPING);
-        IPersonalAttributeList pAttList = new PersonalAttributeList();
         String storkMandatoryAttr = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_AUTH_LOCAL_SEARCH_FILTER, FedPropsValues.STORK_AUTH_LOCAL_SEARCH_FILTER);
         
-        if (storkUserMapping != null) {
-
-            for (String attrMap: storkUserMapping.split("\n")) {
-                if (attrMap.indexOf("=") == -1) {
-                    continue;
-                }
-
-                String strAttrMapA[]= attrMap.split("=");
-                if (strAttrMapA.length != 2) {
-                    continue;
-                }
-                PersonalAttribute attr= new PersonalAttribute();
-                attr.setName(strAttrMapA[1]);
-                if(storkMandatoryAttr.equals(strAttrMapA[0])){
-                    attr.setIsRequired(true);
-                }
-                else{
-                    attr.setIsRequired(false);
-                }
-                pAttList.add(attr);
-            }
-        }
-        
-        authnRequest.setPersonalAttributeList(pAttList);
-
-        byte token[]=null;
-        try{
-
-            STORKSAMLEngine storkEngine= STORKSAMLEngine.getInstance("SP");
-            token= storkEngine.generateSTORKAuthnRequest(authnRequest).getTokenSaml();
+        if(ParamUtil.getString(actionRequest, "StorkAction","none").equals("login")){
             
         }
-        catch(Exception ex){
-            _log.error("Impossible to create the SAML token");
-            _log.error(ex);
-             setForward(actionRequest, "portlet.login.stork.error");
-        }
-        
-        if(token!=null){
-            actionResponse.setRenderParameter("SAMLToken", PEPSUtil.encodeSAMLToken(token));
-            actionResponse.setRenderParameter("CCountry", ParamUtil.getString(actionRequest, "citizenCountry"));
-            actionResponse.setRenderParameter("PEPSUrl", PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SPEPS_URL));
-            setForward(actionRequest, "portlet.login.stork.peps");
+        else{
+            
+            if(Validator.isNull(ParamUtil.getString(actionRequest, "citizenCountry"))){
+                SessionErrors.add(actionRequest, "missUserCountry");
+                return;
+            }
+            STORKAuthnRequest authnRequest= new STORKAuthnRequest();
+
+            authnRequest.setCitizenCountryCode(ParamUtil.getString(actionRequest, "citizenCountry"));
+
+            authnRequest.setIssuer(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_NAME));
+
+            authnRequest.setDestination(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SPEPS_URL));
+
+            authnRequest.setProviderName(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_NAME));
+
+            authnRequest.setQaa(PrefsPropsUtil.getInteger(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_QAALEVEL));
+
+            ActionResponseImpl actionResponseImpl = (ActionResponseImpl) actionResponse;
+            PortletURL portletURL = actionResponseImpl.createActionURL();
+            portletURL.setParameter("struts_action", "/login/stork");
+            portletURL.setParameter("StorkAction", "login");
+            portletURL.setParameter("saveLastPath", "0");
+
+
+            authnRequest.setAssertionConsumerServiceURL(portletURL.toString());
+            _log.debug("STORK Return url: "+portletURL.toString());
+
+            authnRequest.setSpSector(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_SECTOR));
+
+            authnRequest.setSpInstitution(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_NAME));
+
+            authnRequest.setSpApplication(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_APLICATION));
+
+            authnRequest.setSpCountry(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_COUNTRY));
+
+            authnRequest.setSPID(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SP_NAME));
+
+
+            String storkUserMapping = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_USER_MAPPING);
+            IPersonalAttributeList pAttList = new PersonalAttributeList();
+
+            if (storkUserMapping != null) {
+
+                for (String attrMap: storkUserMapping.split("\n")) {
+                    if (attrMap.indexOf("=") == -1) {
+                        continue;
+                    }
+
+                    String strAttrMapA[]= attrMap.split("=");
+                    if (strAttrMapA.length != 2) {
+                        continue;
+                    }
+                    PersonalAttribute attr= new PersonalAttribute();
+                    attr.setName(strAttrMapA[1]);
+                    if(strAttrMapA[0].equals("emailAddress") && storkMandatoryAttr.equals("mail")){
+                        attr.setIsRequired(true);
+                        _log.debug("Attribute "+strAttrMapA[1]+" for "+strAttrMapA[0]+" is required");
+                    }
+                    else{
+                        if(strAttrMapA[0].equals("screenName") && storkMandatoryAttr.equals("screnname")){
+                            attr.setIsRequired(true);
+                            _log.debug("Attribute "+strAttrMapA[1]+" for "+strAttrMapA[0]+" is required");
+                        }
+                        else{
+                            if(strAttrMapA[0].equals("uuid") && storkMandatoryAttr.equals("uuid")){
+                                attr.setIsRequired(true);
+                                _log.debug("Attribute "+strAttrMapA[1]+" for "+strAttrMapA[0]+" is required");
+                            }
+                            else{
+                                attr.setIsRequired(false);
+                                _log.debug("Attribute "+strAttrMapA[1]+" for "+strAttrMapA[0]+" is not required");
+                            }
+
+                        }
+                    }
+                    pAttList.add(attr);
+                }
+            }
+
+            authnRequest.setPersonalAttributeList(pAttList);
+
+            byte token[]=null;
+            try{
+
+                STORKSAMLEngine storkEngine= STORKSAMLEngine.getInstance("SP");
+                token= storkEngine.generateSTORKAuthnRequest(authnRequest).getTokenSaml();
+
+            }
+            catch(Exception ex){
+                _log.error("Impossible to create the SAML token");
+                _log.error(ex);
+                 setForward(actionRequest, "portlet.login.stork.error");
+            }
+
+            if(token!=null){
+                actionResponse.setRenderParameter("SAMLToken", PEPSUtil.encodeSAMLToken(token));
+                actionResponse.setRenderParameter("CCountry", ParamUtil.getString(actionRequest, "citizenCountry"));
+                actionResponse.setRenderParameter("PEPSUrl", PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_SPEPS_URL));
+                setForward(actionRequest, "portlet.login.stork.peps");
+            }
         }
     }
 

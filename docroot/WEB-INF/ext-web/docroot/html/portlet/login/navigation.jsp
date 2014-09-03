@@ -69,7 +69,7 @@ if (Validator.isNotNull(strutsAction) && !strutsAction.equals("/login/login")) {
 }
 %>
 
-<c:if test="<%= showAnonymousIcon || showCreateAccountIcon || showForgotPasswordIcon || showOpenIdIcon || showSAMLIcon || showSignInIcon %>">
+<c:if test="<%= showAnonymousIcon || showCreateAccountIcon || showForgotPasswordIcon || showOpenIdIcon || showSAMLIcon || showSTORKIcon || showSignInIcon %>">
     <c:choose>
         <c:when test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), FedPropsKeys.COMPANY_SECURITY_LOCAL_LOGIN, FedPropsValues.COMPANY_SECURITY_LOCAL_LOGIN) %>">
             <div class="navigation">
@@ -161,7 +161,7 @@ if (Validator.isNotNull(strutsAction) && !strutsAction.equals("/login/login")) {
 			</c:if>
                         
 			<c:if test="<%= showSTORKIcon %>">
-				<portlet:renderURL var="storkUrl">
+				<portlet:renderURL var="storkUrl" windowState="<%= WindowState.MAXIMIZED.toString() %>">
 					<portlet:param name="struts_action" value="/login/stork" />
 				</portlet:renderURL>
 
