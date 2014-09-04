@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -101,7 +100,7 @@ public class SAMLFilter extends BasePortalFilter {
 		String userMail=null;
 		String userFirstName=null;
 		String userLastName=null;
-
+                
                 if (samlUserMapping != null) {
                     samlUserMappingArray = samlUserMapping.split("\n");
 
@@ -120,10 +119,15 @@ public class SAMLFilter extends BasePortalFilter {
 
                         if (mapping[0].equals("screenName")){
 			    userScreenName= (String) request.getAttribute(mapping[1]);
-			    if (localAttributeMatch.equals("screenname")) {
+			    if (localAttributeMatch.equals(mapping[0])){
 				if(userScreenName!=null){
 				    _log.debug("Checking for the mapping: "+mapping[0]);
-				    user= UserLocalServiceUtil.getUserByScreenName(companyId, userScreenName );
+                                    try{
+                                        user= UserLocalServiceUtil.getUserByScreenName(companyId, userScreenName );
+                                    }
+                                    catch(NoSuchUserException nse){
+                                        _log.info("User ScreenName: "+userScreenName+" is not registered");
+                                    }
 				}
 				else{
 				    response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE));
@@ -132,17 +136,22 @@ public class SAMLFilter extends BasePortalFilter {
 			    }
                         } else if (mapping[0].equals("uuid")){
 			    userUuid= (String) request.getAttribute(mapping[1]);
-			    if (localAttributeMatch.equals("uuid")) {
+			    if (localAttributeMatch.equals(mapping[0])) {
 				if(userUuid!=null){
 				    _log.debug("Checking for the mapping: "+mapping[0]);
-				    user= UserLocalServiceUtil.getUserByUuid(userUuid);
+                                    try{
+                                        user= UserLocalServiceUtil.getUserByUuid(userUuid);                                                                        }
+                                    catch(NoSuchUserException nse){
+                                        _log.info("User uuid: "+userUuid+" is not registered");
+                                    }
+
 				}
 				else{
 				    response.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.SAML_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.SAML_AUTH_PAGE_MISS_ATTRIBUTE));
 				    return;
 				}
 			    }
-                        } else if (mapping[0].equals("emailAddress")){
+                        } else if (mapping[0].equals(mapping[0])){
 			    userMail= (String) request.getAttribute(mapping[1]);
 			    if (localAttributeMatch.equals("mail")) {
 				if(userMail!=null){

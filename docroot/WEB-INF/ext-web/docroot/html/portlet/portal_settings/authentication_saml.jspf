@@ -155,8 +155,8 @@ limitations under the License.
 <aui:fieldset column="<%= true %>" cssClass="aui-w100">
 
     <aui:select helpMessage="enter-the-local-map-to-identify-saml-user" label="local-search-filter" name='<%= "settings--" + FedPropsKeys.SAML_AUTH_LOCAL_SEARCH_FILTER + "--" %>'>
-        <aui:option value="screenname" selected="<%= samlLocalAuthSearchFilter.equals("screenname") %>"><liferay-ui:message key="screen-name"/></aui:option>
-        <aui:option value="mail" selected="<%= samlLocalAuthSearchFilter.equals("mail") %>"><liferay-ui:message key="email-address"/></aui:option>
+        <aui:option value="screenName" selected="<%= samlLocalAuthSearchFilter.equals("screenName") %>"><liferay-ui:message key="screen-name"/></aui:option>
+        <aui:option value="emailAddress" selected="<%= samlLocalAuthSearchFilter.equals("emailAddress") %>"><liferay-ui:message key="email-address"/></aui:option>
         <aui:option value="uuid" selected="<%= samlLocalAuthSearchFilter.equals("uuid") %>"><liferay-ui:message key="uuid"/></aui:option>
     </aui:select>
 

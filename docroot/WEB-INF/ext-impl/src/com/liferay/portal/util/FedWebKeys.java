@@ -28,5 +28,6 @@ package com.liferay.portal.util;
 public class FedWebKeys extends WebKeys{
 
     public static final String SAML_ID_LOGIN = "SAML_ID_LOGIN";
+    public static final String STORK_ID_LOGIN = "STORK_ID_LOGIN";
     
 }
