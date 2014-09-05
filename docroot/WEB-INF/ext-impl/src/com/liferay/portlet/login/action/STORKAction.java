@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.FedPropsKeys;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
@@ -36,10 +37,12 @@ import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.FedPropsValues;
 import com.liferay.portal.util.FedWebKeys;
+import com.liferay.portal.util.LDAPUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.STORKUtil;
 import com.liferay.portlet.ActionResponseImpl;
+import com.liferay.portlet.login.action.stork.STORKException;
 import eu.stork.peps.auth.commons.IPersonalAttributeList;
 import eu.stork.peps.auth.commons.PEPSUtil;
 import eu.stork.peps.auth.commons.PersonalAttribute;
@@ -47,9 +50,11 @@ import eu.stork.peps.auth.commons.PersonalAttributeList;
 import eu.stork.peps.auth.commons.STORKAuthnRequest;
 import eu.stork.peps.auth.commons.STORKAuthnResponse;
 import eu.stork.peps.auth.engine.STORKSAMLEngine;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,13 +98,14 @@ public class STORKAction extends PortletAction {
     public void processAction(ActionMapping mapping, ActionForm form, PortletConfig portletConfig, ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(
                 WebKeys.THEME_DISPLAY);
+        long companyId = themeDisplay.getCompanyId();
 
-        if (!STORKUtil.isEnabled(themeDisplay.getCompanyId())) {
+        if (!STORKUtil.isEnabled(companyId)) {
             throw new PrincipalException();
         }
 
-        String storkMandatoryAttr = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_AUTH_LOCAL_SEARCH_FILTER, FedPropsValues.STORK_AUTH_LOCAL_SEARCH_FILTER);
-        Map<String, String> storkUserMapping = getAttrMap(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_USER_MAPPING));
+        String storkMandatoryAttr = PrefsPropsUtil.getString(companyId, FedPropsKeys.STORK_AUTH_LOCAL_SEARCH_FILTER, FedPropsValues.STORK_AUTH_LOCAL_SEARCH_FILTER);
+        Map<String, String> storkUserMapping = getAttrMap(PrefsPropsUtil.getString(companyId, FedPropsKeys.STORK_USER_MAPPING));
 
         if (ParamUtil.getString(actionRequest, "StorkAction", "none").equals("login")) {
             byte[] decSamlToken = PEPSUtil.decodeSAMLToken(ParamUtil.getString(actionRequest, "SAMLResponse"));
@@ -116,99 +122,155 @@ public class STORKAction extends PortletAction {
             if (!authnResponse.isFail()) {
                 Map<String, PersonalAttribute> mPersAttr = createPersonalAttributeMap(authnResponse.getPersonalAttributeList().values());
 
-                User user=null;
-                if(storkMandatoryAttr.equals("screenName")){
-                    _log.debug("Finding user using the "+storkUserMapping.get("screenName"));
-                    if(mPersAttr.containsKey(storkUserMapping.get("screenName"))){
-                        Iterator<String> pa= mPersAttr.get(storkUserMapping.get("screenName")).getValue().iterator();
+                User user = null;
+                if (storkMandatoryAttr.equals("screenName")) {
+                    _log.debug("Finding user using the " + storkUserMapping.get("screenName"));
+                    if (mPersAttr.containsKey(storkUserMapping.get("screenName"))) {
+                        Iterator<String> pa = mPersAttr.get(storkUserMapping.get("screenName")).getValue().iterator();
 
-                        while(pa.hasNext() && user==null){
-                            String screenName=pa.next();
-                            try{
-                                user= UserLocalServiceUtil.getUserByScreenName(themeDisplay.getCompanyId(), screenName);
-                            }
-                            catch(NoSuchUserException nse){
-                                _log.info("User screenName: "+screenName+" is not registered");
+                        while (pa.hasNext() && user == null) {
+                            String screenName = pa.next();
+                            try {
+                                user = UserLocalServiceUtil.getUserByScreenName(companyId, screenName);
+                            } catch (NoSuchUserException nse) {
+                                _log.info("User screenName: " + screenName + " is not registered");
                             }
                         }
-                    }
-                    else{
-                        actionResponse.sendRedirect(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.STORK_AUTH_PAGE_MISS_ATTRIBUTE));
+                    } else {
+                        actionResponse.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.STORK_AUTH_PAGE_MISS_ATTRIBUTE));
                         _log.info("Stork authentication miss the matching attribute. Impossible to identify users");
                         return;
                     }
                 }
-                if(storkMandatoryAttr.equals("uuid")){
-                    _log.debug("Finding user using the "+storkUserMapping.get("uuid"));
-                    if(mPersAttr.containsKey(storkUserMapping.get("uuid"))){
-                        Iterator<String> pa= mPersAttr.get(storkUserMapping.get("uuid")).getValue().iterator();
+                if (storkMandatoryAttr.equals("uuid")) {
+                    _log.debug("Finding user using the " + storkUserMapping.get("uuid"));
+                    if (mPersAttr.containsKey(storkUserMapping.get("uuid"))) {
+                        Iterator<String> pa = mPersAttr.get(storkUserMapping.get("uuid")).getValue().iterator();
 
-                        while(pa.hasNext() && user==null){
-                            String uuid=pa.next();
-                            try{
-                                user= UserLocalServiceUtil.getUserByUuid(uuid);
-                            }
-                            catch(NoSuchUserException nse){
-                                _log.info("User uuid: "+uuid+" is not registered");
+                        while (pa.hasNext() && user == null) {
+                            String uuid = pa.next();
+                            try {
+                                user = UserLocalServiceUtil.getUserByUuid(uuid);
+                            } catch (NoSuchUserException nse) {
+                                _log.info("User uuid: " + uuid + " is not registered");
                             }
                         }
-                    }
-                    else{
-                        actionResponse.sendRedirect(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.STORK_AUTH_PAGE_MISS_ATTRIBUTE));
+                    } else {
+                        actionResponse.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.STORK_AUTH_PAGE_MISS_ATTRIBUTE));
                         _log.info("Stork authentication miss the matching attribute. Impossible to identify users");
                         return;
                     }
-                    
-                }
-                if(storkMandatoryAttr.equals("emailAddress")){
-                    _log.debug("Finding user using the "+storkUserMapping.get("emailAddress"));
-                     if(mPersAttr.containsKey(storkUserMapping.get("emailAddress"))){
-                        Iterator<String> pa= mPersAttr.get(storkUserMapping.get("emailAddress")).getValue().iterator();
 
-                        while(pa.hasNext() && user==null){
+                }
+                if (storkMandatoryAttr.equals("emailAddress")) {
+                    _log.debug("Finding user using the " + storkUserMapping.get("emailAddress"));
+                    if (mPersAttr.containsKey(storkUserMapping.get("emailAddress"))) {
+                        Iterator<String> pa = mPersAttr.get(storkUserMapping.get("emailAddress")).getValue().iterator();
+
+                        while (pa.hasNext() && user == null) {
                             Pattern pat = Pattern.compile("[\\w\\-]([\\.\\w\\-])+@([\\w\\-]+\\.)+[a-zA-Z]{2,4}");
                             Matcher mailMatch;
 
-                            mailMatch= pat.matcher(pa.next());
-                            while(mailMatch.find() && user==null){
+                            mailMatch = pat.matcher(pa.next());
+                            while (mailMatch.find() && user == null) {
                                 if (Validator.isNotNull(mailMatch.group())) {
-                                    try{
-                                        user = UserLocalServiceUtil.getUserByEmailAddress(themeDisplay.getCompanyId(), mailMatch.group());
-                                    }
-                                    catch(NoSuchUserException nse){
-                                        _log.info("Mail: "+mailMatch.group()+" is not registered");
+                                    try {
+                                        user = UserLocalServiceUtil.getUserByEmailAddress(companyId, mailMatch.group());
+                                    } catch (NoSuchUserException nse) {
+                                        _log.info("Mail: " + mailMatch.group() + " is not registered");
                                     }
                                 }
                             }
 
                         }
-                    }
-                    else{
-                        actionResponse.sendRedirect(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.STORK_AUTH_PAGE_MISS_ATTRIBUTE));
+                    } else {
+                        actionResponse.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.STORK_AUTH_PAGE_MISS_ATTRIBUTE));
                         _log.info("Stork authentication miss the matching attribute. Impossible to identify users");
                         return;
                     }
-                    
+
                 }
-                
-                if(user==null && PrefsPropsUtil.getBoolean(themeDisplay.getCompanyId(), FedPropsKeys.STORK_AUTH_LDLAP_CHECK, FedPropsValues.STORK_AUTH_LDLAP_CHECK)){
-                    
+
+                if (user == null && PrefsPropsUtil.getBoolean(companyId, FedPropsKeys.STORK_AUTH_LDLAP_CHECK, FedPropsValues.STORK_AUTH_LDLAP_CHECK)) {
+                    _log.debug("User not found, check on LDAP");
+//                    user=getUserFromLdap();
+
+
+                    String originalLdapFilter = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_AUTH_LDAP_SEARCH_FILTER, FedPropsValues.STORK_AUTH_LDAP_SEARCH_FILTER);
+                    List<String> lstLdapFilter= null;
+                    try{
+                        lstLdapFilter = generateFilters(companyId, mPersAttr.get(storkUserMapping.get("screenName")), mPersAttr.get(storkUserMapping.get("emailAddress")), mPersAttr.get(storkUserMapping.get("firstName")), mPersAttr.get(storkUserMapping.get("lastName")), originalLdapFilter);
+                    }
+                    catch(STORKException se){
+                        _log.error(se.getMessage());
+                        actionResponse.sendRedirect(PrefsPropsUtil.getString(companyId, FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE, FedPropsValues.STORK_AUTH_PAGE_MISS_ATTRIBUTE));
+                        return;
+                    }
+                    String[] idLDAPS = PrefsPropsUtil.getStringArray(companyId, "ldap.server.ids", ",");
+                    String idLDAP;
+                    int idLDAPCounter = 0;
+                    while (user == null && idLDAPCounter < idLDAPS.length) {
+                        idLDAP= idLDAPS[idLDAPCounter++];
+
+                        String mailMap = null;
+                        String userMaps[] = PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_USER_MAPPINGS + "." + idLDAP).split("\n");
+                        int mIndex = 0;
+                        while (mailMap == null && mIndex < userMaps.length) {
+                            String map = userMaps[mIndex++];
+                            if (map.indexOf("=") == -1 || map.split("=").length != 2) {
+                                continue;
+                            }
+                            String[] sMap = map.split("=");
+                            if (sMap[0].equals("emailAddress")) {
+                                mailMap = sMap[1];
+                            }
+                        }
+
+                        if (mailMap == null) {
+                            _log.warn("LDAP server configured without the mail map");
+                            continue;
+                        }
+
+
+
+                        LDAPUtil samlLdapUtil = new LDAPUtil(
+                                PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_BASE_PROVIDER_URL + "." + idLDAP),
+                                PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_BASE_DN + "." + idLDAP));
+
+                        Iterator<String> ldapFilter= lstLdapFilter.iterator();
+                        
+                        while(ldapFilter.hasNext() && user==null){
+                            String mail = samlLdapUtil.getUserAttribute(
+                                    PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_IMPORT_USER_SEARCH_FILTER + "." + idLDAP),
+                                    ldapFilter.next(),
+                                    mailMap);
+
+                            if (mail != null) {
+                                try {
+                                    user = UserLocalServiceUtil.getUserByEmailAddress(companyId, mail);
+                                } catch (NoSuchUserException nse) {
+                                    _log.debug("Mail: " + mail + " found in LDAP but it is not registered");
+                                }
+                            }
+                        }
+                    }
+
                 }
-                
-                
-                
-                
-                if (user==null) {
+
+
+
+
+                if (user == null) {
                     _log.info("Impossible to find a user with the current attributes");
                     actionResponse.sendRedirect(PrefsPropsUtil.getString(themeDisplay.getCompanyId(), FedPropsKeys.STORK_AUTH_PAGE_MISS_USER, FedPropsValues.STORK_AUTH_PAGE_MISS_USER));
                     return;
                 }
-                
-                
-                HttpSession session= PortalUtil.getHttpServletRequest(actionRequest).getSession();
+
+
+                HttpSession session = PortalUtil.getHttpServletRequest(actionRequest).getSession();
                 session.setAttribute(FedWebKeys.STORK_ID_LOGIN, new Long(user.getUserId()));
-                
-                sendRedirect(actionRequest, actionResponse, PortalUtil.getPortalURL(actionRequest)+themeDisplay.getURLSignIn());
+
+                sendRedirect(actionRequest, actionResponse, PortalUtil.getPortalURL(actionRequest) + themeDisplay.getURLSignIn());
             } else {
                 setForward(actionRequest, "portlet.login.stork.error");
             }
@@ -310,7 +372,6 @@ public class STORKAction extends PortletAction {
      * is the STORK attribute name
      * @return
      */
-    
     private Map<String, String> getAttrMap(String map) {
         if (map == null) {
             return null;
@@ -336,11 +397,78 @@ public class STORKAction extends PortletAction {
 
     private Map<String, PersonalAttribute> createPersonalAttributeMap(Collection<PersonalAttribute> values) {
         Map<String, PersonalAttribute> attrMap = new HashMap<String, PersonalAttribute>();
-        
-        for(PersonalAttribute pa: values){
+
+        for (PersonalAttribute pa : values) {
             attrMap.put(pa.getName(), pa);
         }
-        
+
         return attrMap;
+    }
+
+    private List<String> generateFilters(long companyId, PersonalAttribute screnName, PersonalAttribute mail, PersonalAttribute firstName, PersonalAttribute lastName, String originalLdapFilter) throws STORKException{
+        ArrayList<String> filters= new ArrayList<String>();
+        
+        String ldapFilter = originalLdapFilter.replaceAll("@company_id@", Long.toString(companyId));
+
+        if(ldapFilter.contains("@screen_name@") && (screnName==null || screnName.isEmptyValue())){
+            throw new STORKException("Impossible to generate the LDAP Filter, screenname attribute missed");
+        }
+        else{
+            for(String sName: screnName.getValue()){
+                filters.add(ldapFilter.replaceAll("@screen_name@", sName));
+            }
+        }
+        
+        if(ldapFilter.contains("@first_name@") && (firstName==null || firstName.isEmptyValue())){
+            throw new STORKException("Impossible to generate the LDAP Filter, firstname attribute missed");
+        }
+        else{
+            List<String> tmpFilters= filters;
+            filters= new ArrayList<String>();
+            
+            for(String fName: firstName.getValue()){
+                for(String tmpFil: tmpFilters){
+                    filters.add(tmpFil.replaceAll("@first_name@", fName));
+                }
+            }
+        }
+        
+        if(ldapFilter.contains("@last_name@") && (lastName==null || lastName.isEmptyValue())){
+            throw new STORKException("Impossible to generate the LDAP Filter, lastname attribute missed");
+        }
+        else{
+            List<String> tmpFilters= filters;
+            filters= new ArrayList<String>();
+            
+            for(String lName: lastName.getValue()){
+                for(String tmpFil: tmpFilters){
+                    filters.add(tmpFil.replaceAll("@last_name@", lName));
+                }
+            }
+        }
+        
+        if(ldapFilter.contains("@email_address@") && (mail==null || mail.isEmptyValue())){
+            throw new STORKException("Impossible to generate the LDAP Filter, emailaddress attribute missed");
+        }
+        else{
+            
+            
+            List<String> tmpFilters= filters;
+            filters= new ArrayList<String>();
+            
+            for(String uMail: mail.getValue()){
+                Pattern pat = Pattern.compile("[\\w\\-]([\\.\\w\\-])+@([\\w\\-]+\\.)+[a-zA-Z]{2,4}");
+                Matcher mailMatch;
+                mailMatch = pat.matcher(uMail);
+
+                while (mailMatch.find()) {
+                    for(String tmpFil: tmpFilters){
+                        filters.add(tmpFil.replaceAll("@email_address@", mailMatch.group()));
+                    }
+                }
+            }
+        }
+
+        return filters;
     }
 }

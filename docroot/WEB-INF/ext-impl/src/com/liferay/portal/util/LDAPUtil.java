@@ -19,7 +19,7 @@
  * the License.
  **********************************************************************
  */
-package com.liferay.portal.servlet.filters.saml.util;
+package com.liferay.portal.util;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -36,13 +36,13 @@ import javax.naming.ldap.InitialLdapContext;
  *
  * @author Marco Fargetta <marco.fargetta@ct.infn.it>
  */
-public class SAMLLDAPUtil {
+public class LDAPUtil {
 
     private String rootSearch;
     private InitialLdapContext ctx;
     private static Log _log = LogFactoryUtil.getLog(SAMLFilter.class);
 
-    public SAMLLDAPUtil(String ldapURL, String rootSearch) {
+    public LDAPUtil(String ldapURL, String rootSearch) {
         this.rootSearch = rootSearch;
 
         Hashtable<String, String> env = new Hashtable<String, String>();

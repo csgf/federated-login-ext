@@ -35,7 +35,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.servlet.filters.saml.util.SAMLLDAPUtil;
+import com.liferay.portal.util.LDAPUtil;
 import com.liferay.portal.util.FedPropsValues;
 import com.liferay.portal.util.FedWebKeys;
 import com.liferay.portal.util.PortalUtil;
@@ -229,7 +229,7 @@ public class SAMLFilter extends BasePortalFilter {
                         
                         
                         
-                        SAMLLDAPUtil samlLdapUtil = new SAMLLDAPUtil(
+                        LDAPUtil samlLdapUtil = new LDAPUtil(
                                     PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_BASE_PROVIDER_URL+"."+idLDAP),
                                     PrefsPropsUtil.getString(companyId, PropsKeys.LDAP_BASE_DN+"."+idLDAP));
 
