@@ -119,6 +119,7 @@ public class STORKAction extends PortletAction {
                 setForward(actionRequest, "portlet.login.stork.error");
                 return;
             }
+            _log.debug("Authentication response status: "+authnResponse.getStatusCode()+"(reason: "+authnResponse.getSubStatusCode()+") and this is a fail: "+authnResponse.isFail());
             if (!authnResponse.isFail()) {
                 Map<String, PersonalAttribute> mPersAttr = createPersonalAttributeMap(authnResponse.getPersonalAttributeList().values());
 
@@ -272,7 +273,7 @@ public class STORKAction extends PortletAction {
 
                 sendRedirect(actionRequest, actionResponse, PortalUtil.getPortalURL(actionRequest) + themeDisplay.getURLSignIn());
             } else {
-                setForward(actionRequest, "portlet.login.stork.error");
+                setForward(actionRequest, "portlet.login.stork.notAuth");
             }
 
         } else {
@@ -316,13 +317,15 @@ public class STORKAction extends PortletAction {
 
             IPersonalAttributeList pAttList = new PersonalAttributeList();
 
+            boolean eIdentifier=false;
             if (storkUserMapping != null) {
 
                 for (String attrMap : storkUserMapping.keySet()) {
                     PersonalAttribute attr = new PersonalAttribute();
                     attr.setName(storkUserMapping.get(attrMap));
-                    if (attrMap.equals(storkMandatoryAttr)) {
+                    if (attrMap.equals(storkMandatoryAttr) || storkUserMapping.get(attrMap).equals("eIdentifier")) {
                         attr.setIsRequired(true);
+                        eIdentifier=true;
                         _log.debug("Attribute " + attrMap + " mapped in " + storkUserMapping.get(attrMap) + " is required");
                     } else {
                         if (attrMap.equals(storkMandatoryAttr)) {
@@ -340,6 +343,9 @@ public class STORKAction extends PortletAction {
                         }
                     }
                     pAttList.add(attr);
+                }
+                if(!eIdentifier){
+                    pAttList.add(new PersonalAttribute("eIdentifier",true,null,null));
                 }
             }
 

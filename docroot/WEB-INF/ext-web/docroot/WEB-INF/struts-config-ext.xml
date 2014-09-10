@@ -8,6 +8,7 @@
                         <forward name="portlet.login.stork.country" path="portlet.login.stork.country" />
                         <forward name="portlet.login.stork.peps" path="portlet.login.stork.peps" />
                         <forward name="portlet.login.stork.error" path="portlet.login.stork.error" />
+                        <forward name="portlet.login.stork.notAuth" path="portlet.login.stork.notAuth" />
                 </action>
 	</action-mappings>
 </struts-config>

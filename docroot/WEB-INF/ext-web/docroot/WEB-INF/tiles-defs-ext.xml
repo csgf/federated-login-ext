@@ -18,4 +18,8 @@
             <put name="portlet_content" value="/portlet/login/stork/error.jsp"/>
         </definition>
         
+        <definition name="portlet.login.stork.notAuth" extends="portlet.login.stork" >
+            <put name="portlet_content" value="/portlet/login/stork/errorAuth.jsp"/>
+        </definition>
+        
 </tiles-definitions>
