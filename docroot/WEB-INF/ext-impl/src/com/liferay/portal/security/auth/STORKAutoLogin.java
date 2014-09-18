@@ -27,7 +27,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.FedWebKeys;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.SAMLUtil;
+import com.liferay.portal.util.STORKUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -47,7 +47,7 @@ public class STORKAutoLogin implements AutoLogin {
         try {
             long companyId = PortalUtil.getCompanyId(request);
 
-            if (!SAMLUtil.isEnabled(companyId)) {
+            if (!STORKUtil.isEnabled(companyId)) {
                 return credentials;
             }
 

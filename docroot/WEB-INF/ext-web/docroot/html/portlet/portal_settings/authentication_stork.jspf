@@ -228,4 +228,6 @@ limitations under the License.
     <aui:input cssClass="lfr-input-text-container" label="page-no-attribute" name="<%= "settings--" + FedPropsKeys.STORK_AUTH_PAGE_MISS_ATTRIBUTE + "--" %>" type="text" value="<%= storkAttPage %>" />
 
 </aui:fieldset>
+<!--
 <h3><liferay-ui:message key="stork-note" /></h3>
+-->

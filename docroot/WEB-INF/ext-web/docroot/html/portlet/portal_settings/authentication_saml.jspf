@@ -175,4 +175,6 @@ limitations under the License.
     
     <aui:input cssClass="lfr-input-text-container" label="saml-protected-exit" name="<%= "settings--" + FedPropsKeys.SAML_AUTH_PAGE_EXIT + "--" %>" type="text" value="<%= samlProtectedExit %>" />  
 </aui:fieldset>
+<!--
 <h3><liferay-ui:message key="saml-note" /></h3>
+-->
