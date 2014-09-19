@@ -53,5 +53,8 @@ documentation.
 The plug-in work only for Liferay 6.1. It is an ext so after the
 installation the source code of liferay is modified and it cannot be
 reverted to the original so before to install create a backup of your
-current installation
+current installation.
 
+*NOTE:* the plug-in will create a portal-ext.properties, if already present
+this will be overwritten so if you have some option configured please take note
+and apply again after the installation
