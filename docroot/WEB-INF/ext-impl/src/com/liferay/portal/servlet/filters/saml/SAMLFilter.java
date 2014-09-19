@@ -151,16 +151,16 @@ public class SAMLFilter extends BasePortalFilter {
 				    return;
 				}
 			    }
-                        } else if (mapping[0].equals(mapping[0])){
+                        } else if (mapping[0].equals("emailAddress")){
 			    userMail= (String) request.getAttribute(mapping[1]);
-			    if (localAttributeMatch.equals("mail")) {
+			    if (localAttributeMatch.equals(mapping[0])) {
 				if(userMail!=null){
 				    _log.debug("Checking for the mapping: "+mapping[0]);
 
 				    Pattern pat = Pattern.compile("[\\w\\-]([\\.\\w\\-])+@([\\w\\-]+\\.)+[a-zA-Z]{2,4}");
 				    Matcher mailMatch;
 
-				    mailMatch= pat.matcher((String) request.getAttribute(mapping[1]));
+				    mailMatch= pat.matcher(userMail);
 				    while(mailMatch.find() && user==null){
 					if (Validator.isNotNull(mailMatch.group())) {
 					    try{

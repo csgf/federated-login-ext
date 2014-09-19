@@ -416,65 +416,71 @@ public class STORKAction extends PortletAction {
         
         String ldapFilter = originalLdapFilter.replaceAll("@company_id@", Long.toString(companyId));
 
-        if(ldapFilter.contains("@screen_name@") && (screnName==null || screnName.isEmptyValue())){
-            throw new STORKException("Impossible to generate the LDAP Filter, screenname attribute missed");
-        }
-        else{
-            for(String sName: screnName.getValue()){
-                filters.add(ldapFilter.replaceAll("@screen_name@", sName));
+        if(ldapFilter.contains("@screen_name@")){
+            if (screnName==null || screnName.isEmptyValue()){
+                throw new STORKException("Impossible to generate the LDAP Filter, screenname attribute missed");
             }
-        }
-        
-        if(ldapFilter.contains("@first_name@") && (firstName==null || firstName.isEmptyValue())){
-            throw new STORKException("Impossible to generate the LDAP Filter, firstname attribute missed");
-        }
-        else{
-            List<String> tmpFilters= filters;
-            filters= new ArrayList<String>();
-            
-            for(String fName: firstName.getValue()){
-                for(String tmpFil: tmpFilters){
-                    filters.add(tmpFil.replaceAll("@first_name@", fName));
+            else{
+                for(String sName: screnName.getValue()){
+                    filters.add(ldapFilter.replaceAll("@screen_name@", sName));
                 }
             }
         }
         
-        if(ldapFilter.contains("@last_name@") && (lastName==null || lastName.isEmptyValue())){
-            throw new STORKException("Impossible to generate the LDAP Filter, lastname attribute missed");
-        }
-        else{
-            List<String> tmpFilters= filters;
-            filters= new ArrayList<String>();
-            
-            for(String lName: lastName.getValue()){
-                for(String tmpFil: tmpFilters){
-                    filters.add(tmpFil.replaceAll("@last_name@", lName));
-                }
+        if(ldapFilter.contains("@first_name@")){
+            if (firstName==null || firstName.isEmptyValue()){
+                throw new STORKException("Impossible to generate the LDAP Filter, firstname attribute missed");
             }
-        }
-        
-        if(ldapFilter.contains("@email_address@") && (mail==null || mail.isEmptyValue())){
-            throw new STORKException("Impossible to generate the LDAP Filter, emailaddress attribute missed");
-        }
-        else{
-            
-            
-            List<String> tmpFilters= filters;
-            filters= new ArrayList<String>();
-            
-            for(String uMail: mail.getValue()){
-                Pattern pat = Pattern.compile("[\\w\\-]([\\.\\w\\-])+@([\\w\\-]+\\.)+[a-zA-Z]{2,4}");
-                Matcher mailMatch;
-                mailMatch = pat.matcher(uMail);
+            else{
+                List<String> tmpFilters= filters;
+                filters= new ArrayList<String>();
 
-                while (mailMatch.find()) {
+                for(String fName: firstName.getValue()){
                     for(String tmpFil: tmpFilters){
-                        filters.add(tmpFil.replaceAll("@email_address@", mailMatch.group()));
+                        filters.add(tmpFil.replaceAll("@first_name@", fName));
                     }
                 }
             }
         }
+        if(ldapFilter.contains("@last_name@")){
+            if(lastName==null || lastName.isEmptyValue()){
+                throw new STORKException("Impossible to generate the LDAP Filter, lastname attribute missed");
+            }
+            else{
+                List<String> tmpFilters= filters;
+                filters= new ArrayList<String>();
 
+                for(String lName: lastName.getValue()){
+                    for(String tmpFil: tmpFilters){
+                        filters.add(tmpFil.replaceAll("@last_name@", lName));
+                    }
+                }
+            }
+        }
+        
+        if(ldapFilter.contains("@email_address@")){
+            if(mail==null || mail.isEmptyValue()){
+                throw new STORKException("Impossible to generate the LDAP Filter, emailaddress attribute missed");
+            }
+            else{
+
+
+                List<String> tmpFilters= filters;
+                filters= new ArrayList<String>();
+
+                for(String uMail: mail.getValue()){
+                    Pattern pat = Pattern.compile("[\\w\\-]([\\.\\w\\-])+@([\\w\\-]+\\.)+[a-zA-Z]{2,4}");
+                    Matcher mailMatch;
+                    mailMatch = pat.matcher(uMail);
+
+                    while (mailMatch.find()) {
+                        for(String tmpFil: tmpFilters){
+                            filters.add(tmpFil.replaceAll("@email_address@", mailMatch.group()));
+                        }
+                    }
+                }
+            }
+        }
         return filters;
     }
 }
