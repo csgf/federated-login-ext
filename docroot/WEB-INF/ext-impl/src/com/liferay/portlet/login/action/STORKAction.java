@@ -323,7 +323,7 @@ public class STORKAction extends PortletAction {
                 for (String attrMap : storkUserMapping.keySet()) {
                     PersonalAttribute attr = new PersonalAttribute();
                     attr.setName(storkUserMapping.get(attrMap));
-                    if (attrMap.equals(storkMandatoryAttr) || storkUserMapping.get(attrMap).equals("eIdentifier")) {
+                    if (attrMap.equals(storkMandatoryAttr) && storkUserMapping.get(attrMap).equals("eIdentifier")) {
                         attr.setIsRequired(true);
                         eIdentifier=true;
                         _log.debug("Attribute " + attrMap + " mapped in " + storkUserMapping.get(attrMap) + " is required");
@@ -332,13 +332,8 @@ public class STORKAction extends PortletAction {
                             attr.setIsRequired(true);
                             _log.debug("Attribute " + attrMap + " mapped in " + storkUserMapping.get(attrMap) + " is required");
                         } else {
-                            if (attrMap.equals(storkMandatoryAttr)) {
-                                attr.setIsRequired(true);
-                                _log.debug("Attribute " + attrMap + " mapped in " + storkUserMapping.get(attrMap) + " is required");
-                            } else {
-                                attr.setIsRequired(false);
-                                _log.debug("Attribute " + attrMap + " mapped in " + storkUserMapping.get(attrMap) + " is not required");
-                            }
+                            attr.setIsRequired(false);
+                            _log.debug("Attribute " + attrMap + " mapped in " + storkUserMapping.get(attrMap) + " is not required");
 
                         }
                     }
