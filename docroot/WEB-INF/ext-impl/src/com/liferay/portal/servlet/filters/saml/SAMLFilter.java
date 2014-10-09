@@ -153,6 +153,7 @@ public class SAMLFilter extends BasePortalFilter {
 			    }
                         } else if (mapping[0].equals("emailAddress")){
 			    userMail= (String) request.getAttribute(mapping[1]);
+                            _log.debug("SAML mail: "+userMail);
 			    if (localAttributeMatch.equals(mapping[0])) {
 				if(userMail!=null){
 				    _log.debug("Checking for the mapping: "+mapping[0]);

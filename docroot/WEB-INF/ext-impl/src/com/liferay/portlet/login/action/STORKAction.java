@@ -61,9 +61,11 @@ import java.util.regex.Pattern;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletMode;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.WindowState;
 import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -271,7 +273,8 @@ public class STORKAction extends PortletAction {
                 HttpSession session = PortalUtil.getHttpServletRequest(actionRequest).getSession();
                 session.setAttribute(FedWebKeys.STORK_ID_LOGIN, new Long(user.getUserId()));
 
-                sendRedirect(actionRequest, actionResponse, PortalUtil.getPortalURL(actionRequest) + themeDisplay.getURLSignIn());
+//                sendRedirect(actionRequest, actionResponse, PortalUtil.getPortalURL(actionRequest) + themeDisplay.getURLSignIn());
+                sendRedirect(actionRequest, actionResponse, ParamUtil.getString(actionRequest, "redirect",PortalUtil.getPortalURL(actionRequest) + themeDisplay.getURLSignIn()));
             } else {
                 setForward(actionRequest, "portlet.login.stork.notAuth");
             }
@@ -299,7 +302,8 @@ public class STORKAction extends PortletAction {
             portletURL.setParameter("struts_action", "/login/stork");
             portletURL.setParameter("StorkAction", "login");
             portletURL.setParameter("saveLastPath", "0");
-
+            portletURL.setParameter("redirect", ParamUtil.getString(actionRequest, "redirect", themeDisplay.getPathMain()));
+            portletURL.setWindowState(WindowState.NORMAL);
 
             authnRequest.setAssertionConsumerServiceURL(portletURL.toString());
             _log.debug("STORK Return url: " + portletURL.toString());

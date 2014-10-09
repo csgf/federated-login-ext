@@ -147,9 +147,11 @@ if (Validator.isNotNull(strutsAction) && !strutsAction.equals("/login/login")) {
 			<c:if test="<%= showSAMLIcon %>">
 
 				<%
-				String samlAuthURL = SAMLUtil.getAuthURL(themeDisplay.getCompanyId()); 
+				String samlAuthURL = SAMLUtil.getAuthURL(themeDisplay.getCompanyId());
 
-				samlAuthURL = HttpUtil.addParameter(samlAuthURL, "redirectSAML", HttpUtil.encodeURL(PortalUtil.getLayoutURL(themeDisplay.getLayout(),themeDisplay)));
+                                String redirectURL= ParamUtil.getString(request, "redirect", HttpUtil.encodeURL(PortalUtil.getLayoutURL(themeDisplay.getLayout(),themeDisplay)));
+
+				samlAuthURL = HttpUtil.addParameter(samlAuthURL, "redirectSAML", redirectURL);
 
 				%>
                             
@@ -182,6 +184,7 @@ if (Validator.isNotNull(strutsAction) && !strutsAction.equals("/login/login")) {
 
 			<c:if test="<%= showForgotPasswordIcon %>">
 				<portlet:renderURL var="forgotPasswordURL">
+					<portlet:param name="redirect" value="<%= ParamUtil.getString(request, "redirect") %>" />
 					<portlet:param name="struts_action" value="/login/forgot_password" />
 				</portlet:renderURL>
 

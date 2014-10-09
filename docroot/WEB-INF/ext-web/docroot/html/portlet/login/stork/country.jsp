@@ -45,6 +45,7 @@ limitations under the License.
 <portlet:actionURL var="storkURL">
         <portlet:param name="saveLastPath" value="0" />
         <portlet:param name="struts_action" value="/login/stork" />
+        <portlet:param name="redirect" value="<%= ParamUtil.getString(request, "redirect") %>" />
 </portlet:actionURL>
 
 
