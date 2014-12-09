@@ -81,6 +81,9 @@ AUI().use('get', function(A) {
                 }
 
 
+                if( ! $('#europe').length){
+                    return;
+                }
 
                 $('#map-eu').prepend('<span id="loader">' + loadingText + '</span>').addClass('script');
                 $('#europe').find('a').hide();
