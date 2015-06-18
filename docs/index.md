@@ -184,13 +184,13 @@ local account are disabled (username and password fields are not present):
 ![User login](figures/Login.png)
 
 
-# Contribution
+## Contribution
 
 Many features and protocols are not supported and will be developed if and when
 needed. If you would contribute to this project with code, documentation, testing
 or other please fork the project and send pull request with your changes.
 
-# Support
+## Support
 
 There is not formal support for the installation and/or customisation of this
 package. Nevertheless, if you have issues or suggestion please
