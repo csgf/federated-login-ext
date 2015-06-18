@@ -181,7 +181,7 @@ such as when *OpenID* or *Facebook* authentication are enabled. The following
 figures shows the login portlet where both SAML and STORK are enabled and the
 local account are disabled (username and password fields are not present):
 
-![User login](figures/STORK.png)
+![User login](figures/Login.png)
 
 # Contribution
 
