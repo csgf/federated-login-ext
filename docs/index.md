@@ -192,14 +192,16 @@ local account are disabled (username and password fields are not present):
 ![User login](figures/Login.png)
 
 
-## Contribution
+## Contributors
+
+* [Marco Fargetta](https://github.com/fmarco76/)
+
+* [Roberto Barbera](https://github.com/robertobarbera)
+
+### Contribution
 
 Many features and protocols are not supported and will be developed if and when
-needed. If you would contribute to this project with code, documentation, testing
-or other please fork the project and send pull request with your changes.
-
-## Support
-
-There is not formal support for the installation and/or customisation of this
-package. Nevertheless, if you have issues or suggestion please
-[submit an issue on GitHub](https://github.com/csgf/federated-login-ext/issues).
+needed. If you would contribute to this project with code, documentation,
+testing or other please fork the [project in
+GitHub](https://github.com/csgf/federated-login-ext) and send pull request with
+your changes.
