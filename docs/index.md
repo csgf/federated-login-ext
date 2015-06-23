@@ -2,7 +2,7 @@
 
 ## About
 
-The *Federated Login portlet* is an extension plug-in of [Liferay application
+The *Federated Login portlet* is an extension plugin of [Liferay application
 framework](http://www.liferay.com) which introduce additional authentication
 schema to the many already bundled.
 
@@ -17,7 +17,7 @@ Other protocols will be added in the future
 
 ### Requirements
 
-The plug-in work only for Liferay 6.1. It is an ext so after the installation
+The plugin work only for Liferay 6.1. It is an ext so after the installation
 the source code of liferay is modified and it cannot be reverted to the original
 so before to install create a backup of your current installation.
 
@@ -47,12 +47,20 @@ directory.
 
 ### Deployment
 
+In order to deploy the plugin you need to compile it first. The development and
+compilation environment is based on [liferay plugins sdk version
+6.1](http://sourceforge.net/projects/lportal/files/Liferay%20Portal/6.1.1%20GA2/liferay-plugins-sdk-6.1.1-ce-ga2-20121004092655026.zip/download).
+Download and configure Liferay plugin following its documentation and when ready
+clone or download the source code in the ext directory. The command `ant war`
+will build the war in the directory `dist`. It is also deploy the portlet from
+the plugin sdk using the command `ant deploy`.
+
 The Federated Login portlet can be deployed in a Liferay instance as any other
 portlet copying the war file in the deploy directory or uploading the file using
 the marketplace portlet of Liferay and accessing the tab to deploy from war
 file.
 
-*__NOTE:__ the plug-in will create a portal-ext.properties, if already present
+*__NOTE:__ the plugin will create a portal-ext.properties, if already present
 this will be overwritten so if you have some options configured please take
 note and apply again after the installation*
 
@@ -82,7 +90,7 @@ For more information on how to prepare the keystone look at STORK documentation.
 
 ### Post Installation Configuration
 
-After the installation and configuration of the plug-in several new element
+After the installation and configuration of the plugin several new element
 should be visible in the authentication section of portal settings in Liferay
 configuration panel.
 
@@ -113,7 +121,7 @@ authentication. The first combo box, *SAML attribute to identify the user*,
 specify how the user has to be identified inside Liferay. *Create account*
 check-box when enabled will add a new user when SAML attribute does not identify
 any existing user (this feature is not implemented in this version of the
-plug-in). The next check-box, *Check LDAP Account*, will search the user inside
+plugin). The next check-box, *Check LDAP Account*, will search the user inside
 the LDAP, if account are managed in a LDAP server, using the query string
 provided in the following field. This is useful because Liferay copy locally
 only a subset of attributes available so could be useful to search in the larget
