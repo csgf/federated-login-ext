@@ -1,4 +1,4 @@
-# Federated Login Portlet
+# FEDERATED LOGIN
 
 ## About
 
