@@ -1,14 +1,17 @@
 language: java
 
+jdk:
+  - openjdk6
+  - openjdk7
+  - oraclejdk7
+
 before_install:
   - wget -O 'liferay-portal-tomcat-6.1.1-ce-ga2-20120731132656558.zip' 'http://sourceforge.net/projects/lportal/files/Liferay%20Portal/6.1.1%20GA2/liferay-portal-tomcat-6.1.1-ce-ga2-20120731132656558.zip/download'
   - unzip liferay-portal-tomcat-6.1.1-ce-ga2-20120731132656558.zip  > /dev/null
   - wget -O 'liferay-plugins-sdk-6.1.1-ce-ga2-20121004092655026.zip' 'http://sourceforge.net/projects/lportal/files/Liferay%20Portal/6.1.1%20GA2/liferay-plugins-sdk-6.1.1-ce-ga2-20121004092655026.zip/download'
   - unzip liferay-plugins-sdk-6.1.1-ce-ga2-20121004092655026.zip > /dev/null
   - echo "app.server.dir=$HOME/liferay-portal-6.1.1-ce-ga2/tomcat-7.0.27" > liferay-plugins-sdk-6.1.1/build.$USER.properties
-  - mv $TRAVIS_BUILD_DIR/federated-login-ext liferay-plugins-sdk-6.1.1/ext
-
+  - mv $TRAVIS_BUILD_DIR liferay-plugins-sdk-6.1.1/ext
 
 install:
-  - ant test
-  - ant war
+  - cd liferay-plugins-sdk-6.1.1/ext/federated-login-ext
