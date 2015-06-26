@@ -10,7 +10,7 @@ before_install:
   - unzip $HOME/build/liferay-portal-tomcat-6.1.1-ce-ga2-20120731132656558.zip -d $HOME/build/ > /dev/null
   - wget -O $HOME/build/liferay-plugins-sdk-6.1.1-ce-ga2-20121004092655026.zip 'http://sourceforge.net/projects/lportal/files/Liferay%20Portal/6.1.1%20GA2/liferay-plugins-sdk-6.1.1-ce-ga2-20121004092655026.zip/download'
   - unzip $HOME/build/liferay-plugins-sdk-6.1.1-ce-ga2-20121004092655026.zip -d $HOME/build/ > /dev/null
-  - echo "app.server.dir=$HOME/build/liferay-portal-6.1.1-ce-ga2/tomcat-7.0.27" > $HOME/build/liferay-plugins-sdk-6.1.1/build.$USER.properties
+  - echo -e "app.server.dir=$HOME/build/liferay-portal-6.1.1-ce-ga2/tomcat-7.0.27\njavac.compiler=modern\n" > $HOME/build/liferay-plugins-sdk-6.1.1/build.$USER.properties
   - mv $TRAVIS_BUILD_DIR $HOME/build/liferay-plugins-sdk-6.1.1/ext
 
 install:
